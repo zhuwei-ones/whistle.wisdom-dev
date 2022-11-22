@@ -1,12 +1,7 @@
-import { setOnesConfig } from "./rules/env";
-import { TokenInfoEnvRules, LangRules, OnesConfigRules } from "./rules";
-import { getEnvFromUrl, getEnvInfoFromUrl, getFinalRule } from "./lib/getValue";
+import { getAllRule } from "./utils/getValue";
 import { PageAllowHost } from "./const";
 
-export default (
-  server: Whistle.PluginServer,
-  options: Whistle.PluginOptions
-) => {
+export default (server: Whistle.PluginServer) => {
   server.on("request", (req, res) => {
     const reqHost = req.headers.host;
 
@@ -15,9 +10,9 @@ export default (
     );
 
     if (isAllowHost) {
-      const rules = getFinalRule(reqHost);
+      const rules = getAllRule(reqHost);
 
-      console.log("filesdfasdfasdfasdf", rules);
+      console.log("host--->", reqHost, "rules--->", rules);
 
       res.end(rules);
     } else {
