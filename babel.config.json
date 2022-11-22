@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": "auto",
+        "targets": "defaults",
+        "loose": true,
+        "debug": false
+      }
+    ],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [ ]
+}

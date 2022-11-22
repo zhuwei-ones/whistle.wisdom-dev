@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+    "target": "es6",
+    "importsNotUsedAsValues": "remove",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "const": ["src/client/const"],
+      "components": ["src/client/components/*"],
+      "lib": ["src/client/lib/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": [ "node_modules/*"]
+}
