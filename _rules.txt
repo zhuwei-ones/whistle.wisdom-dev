@@ -2,8 +2,4 @@
 
 
 
-/ones\.com/ jsAppend://dist/client/wisdom-dev.min.js includeFilter://resH:content-type=html
-
-/ones\.cn/ jsAppend://dist/client/wisdom-dev.min.js
-
-/myones\.net/ jsAppend://dist/client/wisdom-dev.min.js
+* jsAppend://dist/client/wisdom-dev.min.js includeFilter://resH:content-type=html
