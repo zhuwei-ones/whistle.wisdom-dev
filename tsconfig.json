@@ -14,9 +14,9 @@
     "paths": {
       "const": ["src/client/const"],
       "components": ["src/client/components/*"],
-      "lib": ["src/client/lib/*"]
+      "lib": ["src/client/lib"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": [ "node_modules/*"]
+  "include": ["src/client/*"],
+  "exclude": ["node_modules/*"]
 }

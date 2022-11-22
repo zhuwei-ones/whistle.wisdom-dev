@@ -2,9 +2,8 @@ import { SvelteComponent } from "svelte";
 import { default as CoreCompClass } from "components/Core/index.svelte";
 
 import * as tool from "./lib/tool";
-import $ from "./lib/query";
 
-const WISDOMDEV_ID = "#__wisdomDev";
+const WISDOMDEV_ID = "__wisdomDev";
 
 class WisdomDev {
   public version: string = __VERSION__;
@@ -21,12 +20,11 @@ class WisdomDev {
       this._initComponent();
       this._autoRun();
       console.log("onload");
-      
     };
 
     if (document !== undefined) {
       if (document.readyState === "loading") {
-        $.bind(<any>window, "DOMContentLoaded", _onload);
+        window.addEventListener("DOMContentLoaded", _onload);
       } else {
         _onload();
       }
@@ -37,7 +35,7 @@ class WisdomDev {
    * Init svelte component.
    */
   private _initComponent() {
-    if (!$.one(WISDOMDEV_ID)) {
+    if (!document.getElementById(WISDOMDEV_ID)) {
       const switchX = <any>tool.getStorage("switch_x") * 1;
       const switchY = <any>tool.getStorage("switch_y") * 1;
 
@@ -95,6 +93,6 @@ class WisdomDev {
   }
 }
 
-if(typeof document!=='undefined'){
+if (typeof document !== "undefined") {
   new WisdomDev();
 }

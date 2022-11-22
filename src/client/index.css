@@ -281,6 +281,7 @@
   margin-right:auto;
   padding-left:4px;
   padding-right:0;
-  order:0
+  order:0;
+  cursor: pointer;
 }
 

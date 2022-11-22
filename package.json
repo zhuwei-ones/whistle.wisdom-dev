@@ -7,13 +7,13 @@
     "build:client": "webpack --mode=production --progress ",
     "build:server": "tsc  -p ./src/server/tsconfig.json",
     "dev:server": "tsc -w -p ./src/server/tsconfig.json",
-    "dev:client": "lack watch & npm run dev:client:pack & npm run dev:client:view",
+    "dev:client:w2":"lack watch",
+    "dev:client": "npm run dev:client:pack & npm run dev:client:view",
     "dev:client:pack": "webpack --mode=development --watch --progress",
     "dev:client:view": "webpack serve --config webpack.serve.config  --progress",
     "build-style": "npm run smui-theme",
     "smui-theme": "smui-theme compile src/client/smui.css -i src/client/theme"
   },
-  "main": "dist/client/wisdom-dev.min.js",
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.18.6",
