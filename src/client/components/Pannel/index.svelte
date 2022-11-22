@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { OperationOriginList, PanelConfigList } from "const";
+  import { PanelConfigList } from "const";
   import { onDestroy, onMount } from "svelte";
 
   import Style from "./index.less";
 
   export let show = false;
   export let onJump;
-  // export let currentSetting;
+  export let selectList = {};
 
   /*************************************
    * Lifecycle
@@ -21,7 +21,12 @@
   });
 
   const jumpLink = () => {
+    show = false;
     onJump();
+  };
+
+  const onClose = () => {
+    show = false;
   };
 </script>
 
@@ -33,7 +38,7 @@
         <div class="mdc-dialog__content">
           {#each PanelConfigList as config}
             <div class="form-row">
-              <span>{config.title}</span>
+              <span>{config.title}：</span>
 
               {#each config.options as opt}
                 <div class="mdc-form-field">
@@ -45,6 +50,7 @@
                       type="radio"
                       id={`radio-${opt.value}`}
                       value={opt.value}
+                      bind:group={selectList[config.key]}
                     />
                     <div class="mdc-radio__background">
                       <div class="mdc-radio__outer-circle" />
@@ -58,9 +64,10 @@
             </div>
           {/each}
         </div>
+        <div style="padding:20px">当前配置：{JSON.stringify(selectList)}</div>
         <button class="jump-btn" on:click={jumpLink}> 跳转 </button>
       </div>
     </div>
-    <div class="mdc-dialog__scrim" />
+    <div class="mdc-dialog__scrim" on:click={onClose} on:keypress={onClose} />
   </div>
 </div>
