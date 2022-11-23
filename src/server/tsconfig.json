@@ -10,7 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node"
   },
-  "include": [
-    "../server"
-  ]
+  "include": ["../server"],
+  "exclude": ["*/**/*.test.js"]
 }
