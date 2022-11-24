@@ -10,10 +10,9 @@ export default (server: Whistle.PluginServer) => {
     );
 
     if (isAllowHost) {
-      const rules = getAllRule(reqHost);
+      const rules = getAllRule(req);
 
-      console.log("host--->", reqHost, "rules--->", rules);
-
+      console.log("host--->", reqHost, "url---->", req.url, "rules--->", rules);
       res.end(rules);
     } else {
       res.end(``);
