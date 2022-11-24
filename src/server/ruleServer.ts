@@ -1,4 +1,4 @@
-import { getAllRule } from "./utils/getValue";
+import { getAllRule } from "./utils";
 import { PageAllowHost } from "./const";
 
 export default (server: Whistle.PluginServer) => {

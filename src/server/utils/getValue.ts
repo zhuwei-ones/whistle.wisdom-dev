@@ -1,15 +1,20 @@
 import { IncomingMessage } from "http";
-import { ConfigList } from "./../const";
-import { CommonConfig, LanguageList, OnesConfigList } from "../const";
+import { ConfigList, URl_REG } from "./../const";
+import { LanguageList } from "../const";
 import { ConfigEnv, LangEnv } from "../types/env";
 
 // regExp 使用exec 会有缓存，每次执行都会在上一次执行结果基础上
-const getEnvUrlReg = () => {
+export const getEnvHostnameReg = () => {
   return `((${LanguageList.join("|")})\\.)?((${ConfigList.join("|")})\\.)?(.+)`;
 };
 
+// 获取匹配拼接了 env+config的域名的正则
+export function getEnvUrlReg() {
+  return `\/(https?):\\/\\/${getEnvHostnameReg()}\/`;
+}
+
 export function getUrlMatchResult(hostname: string) {
-  const result = new RegExp(`://${getEnvUrlReg()}$`, "g").exec(hostname);
+  const result = new RegExp(`://${getEnvHostnameReg()}$`, "g").exec(hostname);
 
   return result;
 }
@@ -48,19 +53,13 @@ export function getOriginalHostname(hostname: string) {
   return result?.[5] || "";
 }
 
-// 获取 api 接口导去正确域名的规则（过滤前面自定义添加的域名，比如 zh.com.xxx.xx)
-export function getApiToCurrectHostRules() {
-  return `\/(https?):\\/\\/${getEnvUrlReg()}\/ $1:\/\/$6`;
-}
-
 // 获取 api 接口原本的路径（过滤前面自定义添加的域名，比如 zh.com.xxx.xx/a/a，变成 xxx.xx/a/a)
 export function getApiCurrentPath(url: string) {
   if (!url) {
     return "";
   }
 
-  const regRule = getApiToCurrectHostRules().split(" ")?.[0]?.slice(1, -1);
-
+  const regRule = getEnvUrlReg()?.slice(1, -1);
   const reg = new RegExp(regRule, "g");
   const result = reg.exec(url);
 
@@ -71,151 +70,25 @@ export function getApiCurrentPath(url: string) {
   return `${result[1]}://${result[6]}`;
 }
 
-// 获取语言匹配的规则
-export function getLangRules(lang: LangEnv, referer: string) {
-  if (!lang) {
-    return "";
+// 获取请求正确的来源地址（请求发生时的页面链接）
+export function getCorrectUrlEntry(req: WhistleBase.Request): string {
+  const referer = req.headers.referer;
+  const host = req.headers.host;
+  const originUrl = /^https?:\/\/[\w-.]+(:\d+)?/i.exec(
+    req?.originalReq?.url
+  )?.[0];
+
+  if (!URl_REG.test(referer)) {
+    return originUrl;
   }
 
-  const langJson = {
-    language: {
-      value: lang,
-      maxAge: 600000000,
-      path: "/",
-      domain: referer?.split("//")?.[1] || "",
-    },
-  };
-
-  const apiRules = `
-
-      \`\`\`langJson.json
-      ${JSON.stringify(langJson)}
-      \`\`\`
-
-      \`\`\`lang.txt
-        /\"language\"\:\".+?\"/ig: ""language":"${lang}""
-      \`\`\`
-
-
-      \/\\/\\/(.+?)\\..+\\/api\\/\/ reqCookies://{langJson.json} reqHeaders://accept-language=${lang}  resCookies://{langJson.json} 
-
-      \/\\/\\/(.+?)\\.(.+)\\/token_info\/  resReplace://{lang.txt}
-
-  `;
-
-  const jsRules = `
-
-
-    \`\`\`cookie.js
-
-      // 清除当前cookie
-      document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';}\`;
-      
-      // 设置当前cookie
-      const expireKV =  \`expires=${langJson.language.maxAge}\` ;
-      const pathKV = \`path=${langJson.language.path}\`;
-    
-      document.cookie = \`language=${lang};\${expireKV};\${pathKV};\`;
-    
-    \`\`\`
-
-    * jsPrepend://{cookie.js} includeFilter://resH:content-type=html
-  `;
-
-  return `
-    ${apiRules}
-    ${jsRules}
-  `;
-}
-
-// 获取onesConfig 匹配的规则
-export function getConfigRules(config: ConfigEnv) {
-  if (!config) {
-    return "";
+  if (originUrl.includes(host)) {
+    return originUrl;
   }
 
-  const onesConfigVal = OnesConfigList[config];
-  const onesConfigStr = JSON.stringify(onesConfigVal);
-  const commonOnesConfig = JSON.stringify(CommonConfig);
+  /**
+   * referer 不一定表示当前访问页面链接，而是表示上一个页面的链接，所以这里不能全部使用referer
+   */
 
-  const tokenInfoRuleResult = `
-
-    \`\`\`tokenInfoRule.txt
-      /\"ones\:instance:operatingRegion\"\:\".+?\"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
-      /\"ones\:instance:serveMode\"\:\".+?\"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
-    \`\`\`
-
-    \/\\/\\/(.+?)\\.(.+)\\/token_info\/  resReplace://{tokenInfoRule.txt} 
-
-  `;
-
-  const onesConfigRule = `
-  
-    \`\`\`onesConfig.js 
-      window.onesConfig = Object.assign(
-        (window.onesConfig||{}),
-        ${commonOnesConfig},
-        ${onesConfigStr}
-      )
-    \`\`\`
-
-    * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
-  
-  `;
-
-  return `
-    ${onesConfigRule}
-    ${tokenInfoRuleResult}
-  `;
-}
-
-// 获取其他规则，比如解决跨域，referer
-export function getOtherRules(req: IncomingMessage) {
-  const currentHost = req.headers.origin; // 当前访问的页面的host，比如 ja.myones.net
-  const originHost = `${getApiCurrentPath(currentHost)}`; // 原本的host ,比如 myones.net
-
-  if (req.url.indexOf("check_user_guide") > -1) {
-    console.log(
-      "originHost---->",
-      originHost,
-      "req.headers.referer--->",
-      req.headers.referer
-    );
-  }
-
-  return `
-
-      \`\`\`resHeader.txt
-      access-control-allow-origin: ${currentHost} 
-      \`\`\`
-
-      \`\`\`reqHeader.txt
-      origin: ${originHost}
-      referer: ${originHost}/
-      \`\`\`
-
-      * resHeaders://{resHeader.txt}  reqHeaders://{reqHeader.txt}
-  
-  `;
-}
-
-// 获取所有规则
-export function getAllRule(req: WhistleBase.Request) {
-  const referer =
-    req.headers.referer ||
-    /^https?:\/\/[\w-.]+(:\d+)?/i.exec(req?.originalReq?.url)?.[0];
-  const envInfo = getEnvInfoFromUrl(referer);
-  const { lang, env } = envInfo;
-
-  // console.log("isAllowHost-->", referer, envInfo);
-  ``;
-
-  const resultRole = `
-    ${getLangRules(lang, req.headers.origin)}
-    ${getConfigRules(env)}
-    ${getApiToCurrectHostRules()} 
-    ${getOtherRules(req)}
-  `;
-
-  return resultRole;
+  return referer;
 }

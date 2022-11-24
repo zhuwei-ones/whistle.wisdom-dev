@@ -20,6 +20,4 @@ declare global {
     onesConfig: {};
     commonConfig: {};
   }
-
-  names;
 }

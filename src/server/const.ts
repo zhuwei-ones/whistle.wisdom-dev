@@ -42,3 +42,6 @@ export const CommonConfig = {
   apiDocUrl: "/project/open-api-doc/",
   AUTH_REDIRECT_BASE_URL: "https://ones.cn/api/project/",
 };
+
+export const URl_REG =
+  /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/;
