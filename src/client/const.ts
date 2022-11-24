@@ -76,3 +76,10 @@ export const PageAllowOrigin = [
   "localhost",
   "127.0.0.1",
 ];
+
+export const jumpOriginMap = {
+  sass_cn: "cn",
+  sass_com: "com",
+  private_cn: "cnp",
+  private_com: "comp",
+};

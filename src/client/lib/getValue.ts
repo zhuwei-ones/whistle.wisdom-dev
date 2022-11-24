@@ -65,3 +65,13 @@ export function getEnvInfoFormConfig() {
 
   return getValueFromConfigInfo(data);
 }
+
+export function getOriginalUrl(url: string) {
+  const result = /(https?):\/\/((zh|ja|en)\.)?((cn|com|cnp|comp)\.)?(.+)/.exec(
+    url
+  );
+
+  const originUrl = result?.[6] || "-";
+
+  return originUrl;
+}

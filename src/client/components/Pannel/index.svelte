@@ -1,12 +1,24 @@
 <script lang="ts">
-  import { PanelConfigList } from "const";
+  import {
+    CloudTypeList,
+    FormKeys,
+    jumpOriginMap,
+    LanguageList,
+    OperationOriginList,
+    PanelConfigList,
+  } from "const";
+  import { getOriginalUrl } from "lib";
   import { onDestroy, onMount } from "svelte";
 
   import Style from "./index.less";
 
   export let show = false;
   export let onJump;
-  export let selectList = {};
+  export let selectList = {
+    [FormKeys.cloud]: CloudTypeList[0].value,
+    [FormKeys.origin]: OperationOriginList[0].value,
+    [FormKeys.lang]: LanguageList[0].value,
+  };
 
   /*************************************
    * Lifecycle
@@ -21,6 +33,17 @@
   });
 
   const jumpLink = () => {
+    const cloud = selectList[FormKeys.cloud];
+    const origin = selectList[FormKeys.origin];
+    const lang = selectList[FormKeys.lang];
+    const { host, pathname, protocol, href } = location;
+
+    window.open(
+      `${protocol}//${lang}.${
+        jumpOriginMap[cloud + "_" + origin]
+      }.${getOriginalUrl(href)}`
+    );
+
     show = false;
     onJump();
   };
