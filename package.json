@@ -4,6 +4,8 @@
   "description": "Ones Project 多语言多环境配置独立开发",
   "scripts": {
     "test": "jest",
+    "clean": "rimraf dist",
+    "release": "standard-version",
     "build": "npm run build:server & npm run build:client",
     "build:client": "webpack --mode=production --progress ",
     "build:server": "tsc  -p ./src/server/tsconfig.json",
@@ -44,7 +46,9 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^4.11.1",
-    "webpack-merge": "^5.8.0"
+    "webpack-merge": "^5.8.0",
+    "rimraf": "^3.0.2",
+    "standard-version": "^9.5.0"
   },
   "dependencies": {
     "@colorfuldots/svelteit": "^1.0.0-alpha.7",
