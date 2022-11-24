@@ -6,7 +6,11 @@ import { Socket } from "net";
 
 declare global {
   namespace WhistleBase {
-    class Request extends IncomingMessage {}
+    class Request extends IncomingMessage {
+      originalReq?: {
+        url: string;
+      };
+    }
     class Response extends ServerResponse {}
     class HttpServer extends Server {}
     class Socks extends Socket {}
@@ -16,4 +20,6 @@ declare global {
     onesConfig: {};
     commonConfig: {};
   }
+
+  names;
 }
