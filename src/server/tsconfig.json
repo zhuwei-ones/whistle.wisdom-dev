@@ -11,5 +11,8 @@
     "moduleResolution": "node"
   },
   "include": ["../server"],
-  "exclude": ["*/**/*.test.js"]
+  "exclude": ["*/**/*.test.js"],
+  "path": {
+    "utils": ["src/server/utils/*"]
+  }
 }

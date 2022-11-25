@@ -12,11 +12,11 @@
     "strict": false,
     "baseUrl": ".",
     "paths": {
-      "const": ["src/client/const"],
+      "const": ["src/client/const/*"],
       "components": ["src/client/components/*"],
-      "lib": ["src/client/lib"]
+      "lib": ["src/client/lib/*"]
     }
   },
-  "include": ["src/client/*"],
+  "include": ["."],
   "exclude": ["node_modules/*"]
 }
