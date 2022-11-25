@@ -85,7 +85,6 @@
             </div>
           {/each}
         </div>
-        <div style="padding:20px">当前配置：{JSON.stringify(selectList)}</div>
         <button class="jump-btn" on:click={jumpLink}> 跳转 </button>
       </div>
     </div>

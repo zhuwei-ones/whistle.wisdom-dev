@@ -31,7 +31,7 @@
   };
 </script>
 
-<div id="__wisdomDev">
+<div id="__wisdom-project-dev">
   {#if isProjectEnv}
     <SwitchButton bind:onClick={onShow} />
     <Pannel bind:show />
