@@ -115,15 +115,6 @@ export function getOtherRules(req: IncomingMessage) {
   const currentHost = req.headers.origin; // 当前访问的页面的host，比如 ja.myones.net
   const originHost = `${getApiCurrentPath(currentHost)}`; // 原本的host ,比如 myones.net
 
-  if (req.url.indexOf("check_user_guide") > -1) {
-    console.log(
-      "originHost---->",
-      originHost,
-      "req.headers.referer--->",
-      req.headers.referer
-    );
-  }
-
   if (!currentHost) {
     return ``;
   }
@@ -156,8 +147,6 @@ export function getAllRule(req: WhistleBase.Request) {
     return ``;
   }
 
-  // console.log("isAllowHost-->", currentUrl, envInfo);
-
   const resultRole = `
       ${getLangRules(lang, req.headers.origin)}
       ${getConfigRules(env)}
@@ -165,5 +154,12 @@ export function getAllRule(req: WhistleBase.Request) {
       ${getOtherRules(req)}
     `;
 
+  console.log(
+    "\n\n匹配信息--->",
+    "host--->",
+    req.headers.host,
+    "rules--->",
+    resultRole
+  );
   return resultRole;
 }

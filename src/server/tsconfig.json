@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "outDir": "../../dist/server",
     "noImplicitAny": true,
     "removeComments": true,
@@ -12,7 +13,9 @@
   },
   "include": ["../server"],
   "exclude": ["*/**/*.test.js"],
-  "path": {
-    "utils": ["src/server/utils/*"]
+  "baseUrl": ".",
+  "paths": {
+    "utils": ["src/server/utils/*"],
+    "const": ["src/server/const/*"]
   }
 }

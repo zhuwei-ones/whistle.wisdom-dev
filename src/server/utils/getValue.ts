@@ -1,4 +1,4 @@
-import { ConfigList, URl_REG } from "./../const";
+import { ConfigList, URl_REG } from "../const";
 import { LanguageList } from "../const";
 import { ConfigEnv, LangEnv } from "../types/env";
 
@@ -26,7 +26,7 @@ export function getEnvInfoFromUrl(hostname: string): {
   if (!hostname) {
     return {
       lang: "",
-      env: "",
+      env: ""
     };
   }
 
@@ -37,7 +37,7 @@ export function getEnvInfoFromUrl(hostname: string): {
 
   return {
     lang: lang && LanguageList.includes(lang) ? lang : "",
-    env: env && ConfigList.includes(env) ? env : "",
+    env: env && ConfigList.includes(env) ? env : ""
   };
 }
 
