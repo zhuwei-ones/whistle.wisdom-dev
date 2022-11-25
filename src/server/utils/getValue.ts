@@ -1,4 +1,3 @@
-import { IncomingMessage } from "http";
 import { ConfigList, URl_REG } from "./../const";
 import { LanguageList } from "../const";
 import { ConfigEnv, LangEnv } from "../types/env";
