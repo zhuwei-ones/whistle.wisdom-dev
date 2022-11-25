@@ -9,8 +9,8 @@ import setupRouter from "./router";
 const MAX_AGE = 1000 * 60 * 5;
 
 export default (
-  server: Whistle.PluginServer,
-  options: Whistle.PluginOptions
+  server: Whistle.PluginServer
+  // options: Whistle.PluginOptions
 ) => {
   const app = new Koa();
   app.proxy = true;

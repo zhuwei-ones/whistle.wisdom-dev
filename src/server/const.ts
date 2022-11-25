@@ -8,30 +8,30 @@ export const PageAllowHost = [
   "ones.cn",
   "localhost",
   "127.0.0.1",
-  "our.ones.pro",
+  "our.ones.pro"
 ];
 
 export const OnesConfigList = {
   com: {
     operatingRegion: "com",
     cloudType: "sass",
-    serveMode: "sass",
+    serveMode: "sass"
   },
   comp: {
     operatingRegion: "com",
     cloudType: "private",
-    serveMode: "standalone",
+    serveMode: "standalone"
   },
   cn: {
     operatingRegion: "cn",
     cloudType: "sass",
-    serveMode: "sass",
+    serveMode: "sass"
   },
   cnp: {
     operatingRegion: "cn",
     cloudType: "private",
-    serveMode: "standalone",
-  },
+    serveMode: "standalone"
+  }
 };
 
 export const CommonConfig = {
@@ -40,7 +40,7 @@ export const CommonConfig = {
   WIKI_ROOT: "/wiki",
   OFFICIAL_ROOT: "/",
   apiDocUrl: "/project/open-api-doc/",
-  AUTH_REDIRECT_BASE_URL: "https://ones.cn/api/project/",
+  AUTH_REDIRECT_BASE_URL: "https://ones.cn/api/project/"
 };
 
 export const URl_REG =

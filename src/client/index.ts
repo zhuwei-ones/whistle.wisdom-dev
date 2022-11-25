@@ -77,7 +77,6 @@ class WisdomDev {
       return;
     }
     this.compInstance.show = false;
-    // this._triggerPluginsEvent('hideConsole');
   }
 }
 

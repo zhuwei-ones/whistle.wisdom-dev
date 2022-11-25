@@ -35,12 +35,12 @@ export function getLangRules(lang: LangEnv, referer: string) {
         \`\`\`
   
         \`\`\`lang.txt
-          /\"language\"\:\".+?\"/ig: ""language":"${lang}""
+          /"language":".+?"/ig: ""language":"${lang}""
         \`\`\`
   
-        \/\\/\\/(.+?)\\..+\\/api\\/\/ reqCookies://{langJson.json} reqHeaders://accept-language=${lang}  resCookies://{langJson.json} 
+        /\\/\\/(.+?)\\..+\\/api\\// reqCookies://{langJson.json} reqHeaders://accept-language=${lang}  resCookies://{langJson.json} 
   
-        \/\\/\\/(.+?)\\.(.+)\\/token_info\/  resReplace://{lang.txt}
+        /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{lang.txt}
   
     `;
 
@@ -82,8 +82,8 @@ export function getConfigRules(config: ConfigEnv) {
   const tokenInfoRuleResult = `
   
       \`\`\`tokenInfoRule.txt
-        /\"ones:instance:operatingRegion\"\:\".+?\"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
-        /\"ones:instance:serveMode\"\:\".+?\"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
+        /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
+        /"ones:instance:serveMode":".+?"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
       \`\`\`
   
       /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenInfoRule.txt} 
