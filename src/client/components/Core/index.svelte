@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onMount, onDestroy, createEventDispatcher } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import SwitchButton from "components/SwitchButton/index.svelte";
   import Pannel from "components/Pannel/index.svelte";
   import Style from "./index.less";
-  import { isProject } from "lib";
+  import { isProject } from "lib/index";
 
   let show = false;
   let isProjectEnv = false;

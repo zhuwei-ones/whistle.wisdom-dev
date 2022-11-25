@@ -1,4 +1,4 @@
-import { CloudTypeList } from "./../const";
+import { CloudTypeList } from "../const";
 import { PanelConfigList, FormKeys, DataKeys, DefaultValue } from "const";
 import { getCookie } from "lib";
 

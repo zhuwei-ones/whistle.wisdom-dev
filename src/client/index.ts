@@ -1,14 +1,11 @@
 import { SvelteComponent } from "svelte";
-import { default as CoreCompClass } from "components/Core/index.svelte";
-
-import * as tool from "./lib/tool";
+import CoreCompClass from "components/Core/index.svelte";
 
 const WISDOMDEV_ID = "__wisdomDev";
 
 class WisdomDev {
   public version: string = __VERSION__;
-  public isInited: boolean = false;
-
+  public isInited = false;
   protected compInstance: SvelteComponent;
 
   constructor() {
@@ -36,19 +33,10 @@ class WisdomDev {
    */
   private _initComponent() {
     if (!document.getElementById(WISDOMDEV_ID)) {
-      const switchX = <any>tool.getStorage("switch_x") * 1;
-      const switchY = <any>tool.getStorage("switch_y") * 1;
-
-      let target: HTMLElement = document.documentElement;
+      const target: HTMLElement = document.documentElement;
 
       this.compInstance = new CoreCompClass({
-        target,
-        props: {
-          switchButtonPosition: {
-            x: switchX,
-            y: switchY,
-          },
-        },
+        target
       });
 
       // bind events

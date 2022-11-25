@@ -1,4 +1,4 @@
-declare var __VERSION__: string;
+declare let __VERSION__: string;
 
 declare module "*.less" {
   const use: () => void;
@@ -6,4 +6,4 @@ declare module "*.less" {
   export { use, unuse };
 }
 
-declare var onesConfig;
+declare let onesConfig;

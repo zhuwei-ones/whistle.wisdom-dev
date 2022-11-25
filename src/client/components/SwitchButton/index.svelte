@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { getEnvInfoFormConfig } from "lib";
+  import { getEnvInfoFormConfig } from "lib/index";
   import { onMount, onDestroy } from "svelte";
-  import * as tool from "../../lib/tool";
+  import * as tool from "lib/tool";
   import Style from "./index.less";
 
   /*************************************

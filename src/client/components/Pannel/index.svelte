@@ -6,14 +6,13 @@
     LanguageList,
     OperationOriginList,
     PanelConfigList,
-  } from "const";
-  import { getOriginalUrl } from "lib";
+  } from "const/index";
+  import { getOriginalUrl } from "lib/index";
   import { onDestroy, onMount } from "svelte";
 
   import Style from "./index.less";
 
   export let show = false;
-  export let onJump;
   export let selectList = {
     [FormKeys.cloud]: CloudTypeList[0].value,
     [FormKeys.origin]: OperationOriginList[0].value,
@@ -45,7 +44,6 @@
     );
 
     show = false;
-    onJump();
   };
 
   const onClose = () => {

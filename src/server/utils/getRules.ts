@@ -1,16 +1,16 @@
 import { IncomingMessage } from "http";
-import { CommonConfig, OnesConfigList, URl_REG } from "../const";
+import { CommonConfig, OnesConfigList } from "../const";
 import { ConfigEnv, LangEnv } from "../types/env";
 import {
   getApiCurrentPath,
   getEnvUrlReg,
   getEnvInfoFromUrl,
-  getCorrectUrlEntry,
+  getCorrectUrlEntry
 } from "./getValue";
 
 //【获取规则】api 接口导去正确域名（过滤前面自定义添加的域名，比如 zh.com.xxx.xx)
 export function getApiToCurrectHostRules() {
-  return `${getEnvUrlReg()} $1:\/\/$6`;
+  return `${getEnvUrlReg()} $1://$6`;
 }
 
 //【获取规则】语言匹配
@@ -24,8 +24,8 @@ export function getLangRules(lang: LangEnv, referer: string) {
       value: lang,
       maxAge: 600000000,
       path: "/",
-      domain: referer?.split("//")?.[1] || "",
-    },
+      domain: referer?.split("//")?.[1] || ""
+    }
   };
 
   const apiRules = `
@@ -82,11 +82,11 @@ export function getConfigRules(config: ConfigEnv) {
   const tokenInfoRuleResult = `
   
       \`\`\`tokenInfoRule.txt
-        /\"ones\:instance:operatingRegion\"\:\".+?\"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
-        /\"ones\:instance:serveMode\"\:\".+?\"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
+        /\"ones:instance:operatingRegion\"\:\".+?\"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
+        /\"ones:instance:serveMode\"\:\".+?\"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
       \`\`\`
   
-      \/\\/\\/(.+?)\\.(.+)\\/token_info\/  resReplace://{tokenInfoRule.txt} 
+      /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenInfoRule.txt} 
   
     `;
 

@@ -17,6 +17,7 @@
       "lib": ["src/client/lib/*"]
     }
   },
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "include": ["."],
   "exclude": ["node_modules/*"]
 }
