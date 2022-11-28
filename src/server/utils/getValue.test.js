@@ -2,6 +2,8 @@ const {
   getEnvInfoFromUrl,
   getOriginalHostname,
   getApiCurrentPath,
+  getCorrectUrlEntry,
+  getEnvUrlReg
 } = require("./getValue");
 
 describe("Test getEnvInfoFromUrl", () => {
@@ -10,7 +12,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: "",
+      env: ""
     });
   });
   test("Test Empty Url", () => {
@@ -18,7 +20,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: "",
+      env: ""
     });
   });
 
@@ -27,7 +29,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: "",
+      env: ""
     });
   });
 
@@ -36,7 +38,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: "",
+      env: ""
     });
   });
 
@@ -45,7 +47,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "en",
-      env: "",
+      env: ""
     });
   });
 
@@ -54,7 +56,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: "com",
+      env: "com"
     });
   });
 
@@ -63,7 +65,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "en",
-      env: "com",
+      env: "com"
     });
   });
 
@@ -72,7 +74,7 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "en",
-      env: "com",
+      env: "com"
     });
   });
 });
@@ -150,6 +152,86 @@ describe("Test getApiCurrentPath", () => {
     );
     expect(getApiCurrentPath("http://en.com.dev.myones.net/")).toEqual(
       "http://dev.myones.net/"
+    );
+  });
+});
+
+describe("Test getCorrectUrlEntry", () => {
+  test("Test No Referer", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "",
+          host: ""
+        },
+        originalReq: {
+          url: "http://dev.myones.net/a/a/a"
+        }
+      })
+    ).toEqual("http://dev.myones.net");
+  });
+
+  test("Test / Referer", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "/",
+          host: "dev.myones.net"
+        },
+        originalReq: {
+          url: "http://dev.myones.net/a/a/a"
+        }
+      })
+    ).toEqual("http://dev.myones.net");
+  });
+
+  test("Test Correct Referer", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "http://preview.myones.net/",
+          host: "dev.myones.net"
+        },
+        originalReq: {
+          url: "http://dev.myones.net/a/a/a"
+        }
+      })
+    ).toEqual("http://dev.myones.net");
+  });
+
+  test("Test No Req Url", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "http://preview.myones.net/",
+          host: "dev.myones.net"
+        },
+        originalReq: {
+          url: ""
+        }
+      })
+    ).toEqual("http://preview.myones.net/");
+  });
+
+  test("Test No Host", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "http://preview.myones.net/",
+          host: ""
+        },
+        originalReq: {
+          url: "http://dev.myones.net/a"
+        }
+      })
+    ).toEqual("http://preview.myones.net/");
+  });
+});
+
+describe("Test getEnvHostnameReg", () => {
+  test("Test No Referer", () => {
+    expect(getEnvUrlReg()).toEqual(
+      "(https?):\\/\\/((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)"
     );
   });
 });

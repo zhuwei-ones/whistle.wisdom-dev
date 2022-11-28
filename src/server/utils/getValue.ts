@@ -9,7 +9,7 @@ export const getEnvHostnameReg = () => {
 
 // 获取匹配拼接了 env+config的域名的正则
 export function getEnvUrlReg() {
-  return `\/(https?):\\/\\/${getEnvHostnameReg()}\/`;
+  return `(https?):\\/\\/${getEnvHostnameReg()}`;
 }
 
 export function getUrlMatchResult(hostname: string) {
@@ -58,7 +58,7 @@ export function getApiCurrentPath(url: string) {
     return "";
   }
 
-  const regRule = getEnvUrlReg()?.slice(1, -1);
+  const regRule = getEnvUrlReg();
   const reg = new RegExp(regRule, "g");
   const result = reg.exec(url);
 
@@ -81,7 +81,7 @@ export function getCorrectUrlEntry(req: WhistleBase.Request): string {
     return originUrl;
   }
 
-  if (originUrl.includes(host)) {
+  if (host && originUrl?.includes(host)) {
     return originUrl;
   }
 
