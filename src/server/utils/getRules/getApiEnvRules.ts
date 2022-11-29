@@ -1,5 +1,6 @@
 import { IncomingMessage } from "http";
 import * as Cookie from "cookie";
+import { HOST_REG } from "../../const";
 
 // 注入一段js 脚本，设置当前页面的接口分支
 export function getApiBranchConfigRules() {
@@ -37,6 +38,7 @@ export function getApiBranchEnvRules(req: IncomingMessage) {
   const cookiesObj = Cookie.parse(cookies || "");
 
   const apiBranch = cookiesObj.api_branch;
+  const isBranch = !HOST_REG.test(apiBranch);
 
   if (!apiBranch) {
     return ``;
@@ -54,7 +56,15 @@ export function getApiBranchEnvRules(req: IncomingMessage) {
     /\\/\\/(.+?)\\..+\\/api\\//  reqHeaders://{branch.txt}
   `;
 
-  return ApiBranchRules;
+  const ApiHostRules = `
+    \`\`\`branch.txt
+    x-ones-api-host:	${apiBranch}/project/api/project/
+    \`\`\`
+
+    /\\/\\/(.+?)\\..+\\/api\\//  reqHeaders://{branch.txt}/project/api/project/
+  `;
+
+  return isBranch ? ApiBranchRules : ApiHostRules;
 }
 
 export function getApiBranchRules(req: IncomingMessage) {

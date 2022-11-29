@@ -92,11 +92,19 @@
           {/each}
 
           <div class="form-row">
-            <span>API 分支：</span>
+            <span>API 指向：</span>
             <div class="mdc-input">
               <input type="text" placeholder="" bind:value={apiBranch} />
             </div>
           </div>
+
+          <p class="mdc-tip">
+            tip:
+            <br />
+            1、直接配置分支，比如 U0044
+            <br />
+            2、直接配置域名，比如 https://mars-dev.myones.net:16416
+          </p>
         </div>
         <button class="jump-btn" on:click={jumpLink}> 跳转 </button>
       </div>

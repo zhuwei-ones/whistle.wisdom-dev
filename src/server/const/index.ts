@@ -45,3 +45,5 @@ export const CommonConfig = {
 
 export const URl_REG =
   /^((ht|f)tps?):\/\/[\w-]+(\.[\w-]+)+([\w\-.,@?^=%&:/~+#]*[\w\-@?^=%&/~+#])?$/;
+
+export const HOST_REG = /^https?:\/\/[\w-.]+(:\d+)?/i;

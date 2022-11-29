@@ -1,4 +1,4 @@
-import { ConfigList, URl_REG } from "../const";
+import { ConfigList, HOST_REG, URl_REG } from "../const";
 import { LanguageList } from "../const";
 import { ConfigEnv, LangEnv } from "../types/env";
 
@@ -73,9 +73,7 @@ export function getApiCurrentPath(url: string) {
 export function getCorrectUrlEntry(req: WhistleBase.Request): string {
   const referer = req.headers.referer;
   const host = req.headers.host;
-  const originUrl = /^https?:\/\/[\w-.]+(:\d+)?/i.exec(
-    req?.originalReq?.url
-  )?.[0];
+  const originUrl = HOST_REG.exec(req?.originalReq?.url)?.[0];
 
   if (!URl_REG.test(referer)) {
     return originUrl;
