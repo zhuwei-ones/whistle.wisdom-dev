@@ -27,12 +27,12 @@ export function getAllRule(req: WhistleBase.Request) {
   }
 
   const resultRole = `
-        ${getLangRules(lang, req.headers.origin)}
-        ${getOnesConfigRules(env)}
-        ${getApiBranchRules(req)}
-        ${getApiToCurrectHostRules()} 
-        ${getOtherRules(req)}
-      `;
+    ${getLangRules(lang, req.headers.origin)}
+    ${getOnesConfigRules(env)}
+    ${getApiBranchRules(req)}
+    ${getApiToCurrectHostRules()} 
+    ${getOtherRules(req)}
+  `;
 
   console.log(
     "\n\n匹配信息--->",

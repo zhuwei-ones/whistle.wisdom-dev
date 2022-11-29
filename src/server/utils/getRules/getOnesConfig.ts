@@ -8,16 +8,16 @@ export function getOnesConfigJsRules(config: Exclude<ConfigEnv, "">) {
   const onesConfigStr = JSON.stringify(onesConfigVal);
   const commonOnesConfig = JSON.stringify(CommonConfig);
   const onesConfigRule = `
-        \`\`\`onesConfig.js 
-          window.onesConfig = Object.assign(
-            (window.onesConfig||{}),
-            ${commonOnesConfig},
-            ${onesConfigStr}
-          )
-        \`\`\`
-        
-        * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
-      `;
+    \`\`\`onesConfig.js 
+      window.onesConfig = Object.assign(
+        (window.onesConfig||{}),
+        ${commonOnesConfig},
+        ${onesConfigStr}
+      )
+    \`\`\`
+    
+    * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
+  `;
 
   return onesConfigRule;
 }
@@ -26,13 +26,13 @@ export function getOnesConfigJsRules(config: Exclude<ConfigEnv, "">) {
 export function getOnesConfigApiRules(config: Exclude<ConfigEnv, "">) {
   const onesConfigVal = OnesConfigList[config];
   const tokenInfoRuleResult = `
-        \`\`\`tokenInfoRule.txt
-          /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
-          /"ones:instance:serveMode":".+?"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
-        \`\`\`
-        
-        /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenInfoRule.txt} 
-      `;
+    \`\`\`tokenInfoRule.txt
+      /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
+      /"ones:instance:serveMode":".+?"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
+    \`\`\`
+    
+    /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenInfoRule.txt} 
+  `;
 
   return tokenInfoRuleResult;
 }
@@ -44,7 +44,7 @@ export function getOnesConfigRules(config: ConfigEnv) {
   }
 
   return `
-        ${getOnesConfigJsRules(config)}
-        ${getOnesConfigApiRules(config)}
-      `;
+    ${getOnesConfigJsRules(config)}
+    ${getOnesConfigApiRules(config)}
+  `;
 }

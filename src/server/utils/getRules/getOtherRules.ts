@@ -11,15 +11,15 @@ export function getOtherRules(req: IncomingMessage) {
   }
 
   return `
-          \`\`\`resHeader.txt
-          access-control-allow-origin: ${currentHost} 
-          \`\`\`
-          
-          \`\`\`reqHeader.txt
-          origin: ${originHost}
-          referer: ${originHost}/
-          \`\`\`
-          
-          * resHeaders://{resHeader.txt}  reqHeaders://{reqHeader.txt}
-      `;
+      \`\`\`resHeader.txt
+      access-control-allow-origin: ${currentHost} 
+      \`\`\`
+      
+      \`\`\`reqHeader.txt
+      origin: ${originHost}
+      referer: ${originHost}/
+      \`\`\`
+      
+      * resHeaders://{resHeader.txt}  reqHeaders://{reqHeader.txt}
+  `;
 }
