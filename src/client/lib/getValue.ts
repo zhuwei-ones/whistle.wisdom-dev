@@ -42,6 +42,10 @@ export function getLanguage() {
   return getCookie(DataKeys[lang]);
 }
 
+export function getApiBranch() {
+  return getCookie("api_branch");
+}
+
 /**
  * 1、从 cookie 中获取 语言
  * 2、从 onesConfig 中 获取 origin 和 cloudType
@@ -61,9 +65,12 @@ export function getEnvInfoFormConfig() {
   data[origin] = getOperationOrigin();
   data[lang] = getLanguage();
 
-  console.log("data", data);
+  console.log("当前开发环境信息--->", data);
 
-  return getValueFromConfigInfo(data);
+  return `
+    ${getValueFromConfigInfo(data)}
+    API 分支指向： ${getApiBranch()}
+  `.trim();
 }
 
 export function getOriginalUrl(url: string) {

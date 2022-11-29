@@ -18,6 +18,7 @@
     [FormKeys.origin]: OperationOriginList[0].value,
     [FormKeys.lang]: LanguageList[0].value,
   };
+  export let apiBranch = "";
 
   /*************************************
    * Lifecycle
@@ -35,13 +36,18 @@
     const cloud = selectList[FormKeys.cloud];
     const origin = selectList[FormKeys.origin];
     const lang = selectList[FormKeys.lang];
-    const { host, pathname, protocol, href } = location;
+    const { protocol, href } = location;
 
-    window.open(
-      `${protocol}//${lang}.${
-        jumpOriginMap[cloud + "_" + origin]
-      }.${getOriginalUrl(href)}`
-    );
+    const link = `${protocol}//${lang}.${
+      jumpOriginMap[cloud + "_" + origin]
+    }.${getOriginalUrl(href)}`;
+
+    const data = {
+      api_branch: apiBranch || "master",
+      link,
+    };
+
+    window.open(link, JSON.stringify(data));
 
     show = false;
   };
@@ -55,7 +61,7 @@
   <div class="mdc-dialog mdc-dialog--open">
     <div class="mdc-dialog__container">
       <div class="mdc-dialog__surface">
-        <h2 class="mdc-dialog__title">新建一个Project独立开发环境</h2>
+        <h2 class="mdc-dialog__title">新建Project独立开发环境</h2>
         <div class="mdc-dialog__content">
           {#each PanelConfigList as config}
             <div class="form-row">
@@ -84,6 +90,17 @@
               {/each}
             </div>
           {/each}
+
+          <div class="form-row">
+            <span>API 分支：</span>
+            <div class="mdc-input">
+              <input
+                type="text"
+                placeholder="不填默认是master"
+                bind:value={apiBranch}
+              />
+            </div>
+          </div>
         </div>
         <button class="jump-btn" on:click={jumpLink}> 跳转 </button>
       </div>

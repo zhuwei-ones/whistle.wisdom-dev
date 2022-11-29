@@ -1,3 +1,5 @@
+export const DOM_ID = "__wisdom-project-dev";
+
 export const OperationOriginList = [
   {
     label: "国内",

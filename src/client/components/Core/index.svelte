@@ -4,6 +4,7 @@
   import Pannel from "components/Pannel/index.svelte";
   import Style from "./index.less";
   import { isProject } from "lib/index";
+  import { DOM_ID } from "const/index";
 
   let show = false;
   let isProjectEnv = false;
@@ -31,7 +32,7 @@
   };
 </script>
 
-<div id="__wisdom-project-dev">
+<div id={DOM_ID}>
   {#if isProjectEnv}
     <SwitchButton bind:onClick={onShow} />
     <Pannel bind:show />

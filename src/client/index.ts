@@ -1,5 +1,6 @@
 import { SvelteComponent } from "svelte";
 import CoreCompClass from "components/Core/index.svelte";
+import { DOM_ID } from "const/index";
 
 class WisdomDev {
   public version: string = __VERSION__;
@@ -29,6 +30,9 @@ class WisdomDev {
    * Init svelte component.
    */
   private _initComponent() {
+    if (document.getElementById(DOM_ID)) {
+      return;
+    }
     this.compInstance = new CoreCompClass({
       target: document.documentElement
     });

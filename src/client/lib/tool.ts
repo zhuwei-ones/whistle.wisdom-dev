@@ -2,17 +2,15 @@
  * get formatted date by timestamp
  */
 export function getDate(time: number) {
-  let d = time > 0 ? new Date(time) : new Date();
-  let day = d.getDate() < 10 ? "0" + d.getDate() : d.getDate(),
-    month = d.getMonth() < 9 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1,
-    year = d.getFullYear(),
-    hour = d.getHours() < 10 ? "0" + d.getHours() : d.getHours(),
-    minute = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes(),
-    second = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds(),
-    millisecond =
-      d.getMilliseconds() < 10
-        ? "0" + d.getMilliseconds()
-        : d.getMilliseconds();
+  const d = time > 0 ? new Date(time) : new Date();
+  const day = d.getDate() < 10 ? "0" + d.getDate() : d.getDate();
+  const month = d.getMonth() < 9 ? "0" + (d.getMonth() + 1) : d.getMonth() + 1;
+  const year = d.getFullYear();
+  const hour = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
+  const minute = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+  const second = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
+  let millisecond =
+    d.getMilliseconds() < 10 ? "0" + d.getMilliseconds() : d.getMilliseconds();
   if (millisecond < 100) {
     millisecond = "0" + millisecond;
   }
@@ -24,7 +22,7 @@ export function getDate(time: number) {
     hour: hour,
     minute: minute,
     second: second,
-    millisecond: millisecond,
+    millisecond: millisecond
   };
 }
 
@@ -49,7 +47,7 @@ export function getStorage(key: string) {
 /**
  * Generate a 6-digit unique string with prefix `"__vc_" + ${prefix}`
  */
-export function getUniqueID(prefix: string = "") {
+export function getUniqueID(prefix = "") {
   return "__ws_" + prefix + Math.random().toString(36).substring(2, 8);
 }
 
