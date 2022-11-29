@@ -1,4 +1,4 @@
-import { getApiBranchEnvRules } from "./getApiEnvRules";
+import { getApiBranchRules } from "./getApiEnvRules";
 import { getLangRules } from "./getLangRule";
 import { getOnesConfigRules } from "./getOnesConfig";
 import { getOtherRules } from "./getOtherRules";
@@ -29,7 +29,7 @@ export function getAllRule(req: WhistleBase.Request) {
   const resultRole = `
         ${getLangRules(lang, req.headers.origin)}
         ${getOnesConfigRules(env)}
-        ${getApiBranchEnvRules(req)}
+        ${getApiBranchRules(req)}
         ${getApiToCurrectHostRules()} 
         ${getOtherRules(req)}
       `;
