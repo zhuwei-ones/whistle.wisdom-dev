@@ -80,7 +80,7 @@ describe("Test getAllRules", () => {
           try{
             const obj = JSON.parse(data) ||{};
 
-            api_branch = obj.api_branch || 'master';
+            api_branch = obj.api_branch ;
 
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
@@ -140,7 +140,7 @@ describe("Test getAllRules", () => {
       try{
         const obj = JSON.parse(data) ||{};
 
-        api_branch = obj.api_branch || 'master';
+        api_branch = obj.api_branch ;
 
         // 清除当前cookie
         document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
@@ -229,7 +229,7 @@ describe("Test getAllRules", () => {
           try{
             const obj = JSON.parse(data) ||{};
 
-            api_branch = obj.api_branch || 'master';
+            api_branch = obj.api_branch ;
 
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
@@ -319,7 +319,7 @@ describe("Test getAllRules", () => {
           try{
             const obj = JSON.parse(data) ||{};
 
-            api_branch = obj.api_branch || 'master';
+            api_branch = obj.api_branch ;
 
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
@@ -418,7 +418,7 @@ describe("Test getAllRules", () => {
           try{
             const obj = JSON.parse(data) ||{};
 
-            api_branch = obj.api_branch || 'master';
+            api_branch = obj.api_branch ;
 
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;

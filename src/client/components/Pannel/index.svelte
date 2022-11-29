@@ -94,11 +94,7 @@
           <div class="form-row">
             <span>API 分支：</span>
             <div class="mdc-input">
-              <input
-                type="text"
-                placeholder="不填默认是master"
-                bind:value={apiBranch}
-              />
+              <input type="text" placeholder="" bind:value={apiBranch} />
             </div>
           </div>
         </div>

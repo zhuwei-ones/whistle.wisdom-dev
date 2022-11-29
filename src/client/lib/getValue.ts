@@ -1,6 +1,6 @@
 import { CloudTypeList } from "../const";
-import { PanelConfigList, FormKeys, DataKeys, DefaultValue } from "const";
-import { getCookie } from "lib";
+import { PanelConfigList, FormKeys, DataKeys, DefaultValue } from "const/index";
+import { getCookie } from "lib/index";
 
 // 从配置信息中翻译出来中文
 export function getValueFromConfigInfo(config) {
@@ -69,7 +69,7 @@ export function getEnvInfoFormConfig() {
 
   return `
     ${getValueFromConfigInfo(data)}
-    API 分支指向： ${getApiBranch()}
+    API 指向： ${getApiBranch()}
   `.trim();
 }
 
