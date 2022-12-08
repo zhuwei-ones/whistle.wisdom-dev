@@ -45,7 +45,7 @@ describe("Test getAllRules", () => {
       removeUnusedChar(
         `
         \`\`\`langJson.json
-        {"language":{"value":"en","maxAge":600000000,"path":"/","domain":""}}
+        {"language":{"value":"en","maxAge":600000000,"expires": "3000-01-04T04:17:38.081Z","path":"/","domain":""}}
         \`\`\`
 
         \`\`\`lang.txt
@@ -63,14 +63,14 @@ describe("Test getAllRules", () => {
             document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
             
             // 设置当前cookie
-            const expireKV =  \`expires=600000000\` ;
-            const pathKV = \`path=/\`;
+            var expireKV =  \`expires='3000-01-04T04:17:38.081Z'\` ;
+            var pathKV = \`path=/\`;
             
             document.cookie = \`language=en;\${expireKV};\${pathKV};\`;
             
         \`\`\`
         
-        * jsPrepend://{cookie.js} includeFilter://resH:content-type=html
+        * jsPrepend://{cookie.js} jsAppend://{cookie.js} includeFilter://resH:content-type=html
 
         \`\`\`apiBranch.js 
 
@@ -85,9 +85,7 @@ describe("Test getAllRules", () => {
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
 
-            if(api_branch) {
-              document.cookie = \`api_branch=\${api_branch};\`;
-            } 
+            document.cookie = \`api_branch=\${api_branch};\`;
 
           }catch(e){}
         
@@ -117,13 +115,13 @@ describe("Test getAllRules", () => {
         `
         \`\`\`onesConfig.js 
         window.onesConfig = Object.assign(
-          (window.onesConfig||{}),
           ${JSON.stringify(CommonConfig)},
+          (window.onesConfig||{}),
           ${JSON.stringify(OnesConfigList.comp)}
         )
       \`\`\`
       
-      * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
+      * jsPrepend://{onesConfig.js} jsAppend://{onesConfig.js} includeFilter://resH:content-type=html
     
       \`\`\`tokenInfoRule.txt
       /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"com""
@@ -145,9 +143,7 @@ describe("Test getAllRules", () => {
         // 清除当前cookie
         document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
 
-        if(api_branch) {
-          document.cookie = \`api_branch=\${api_branch};\`;
-        } 
+        document.cookie = \`api_branch=\${api_branch};\`;
 
       }catch(e){}
     
@@ -177,7 +173,7 @@ describe("Test getAllRules", () => {
         `
 
         \`\`\`langJson.json
-        {"language":{"value":"zh","maxAge":600000000,"path":"/","domain":""}}
+        {"language":{"value":"zh","maxAge":600000000,"expires": "3000-01-04T04:17:38.081Z","path":"/","domain":""}}
         \`\`\`
 
         \`\`\`lang.txt
@@ -195,24 +191,24 @@ describe("Test getAllRules", () => {
             document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
             
             // 设置当前cookie
-            const expireKV =  \`expires=600000000\` ;
-            const pathKV = \`path=/\`;
+            var expireKV =  \`expires='3000-01-04T04:17:38.081Z'\` ;
+            var pathKV = \`path=/\`;
             
             document.cookie = \`language=zh;\${expireKV};\${pathKV};\`;
             
         \`\`\`
         
-        * jsPrepend://{cookie.js} includeFilter://resH:content-type=html
+        * jsPrepend://{cookie.js} jsAppend://{cookie.js} includeFilter://resH:content-type=html
 
         \`\`\`onesConfig.js 
             window.onesConfig = Object.assign(
+              ${JSON.stringify(CommonConfig)},
             (window.onesConfig||{}),
-            ${JSON.stringify(CommonConfig)},
             ${JSON.stringify(OnesConfigList.comp)}
             )
         \`\`\`
         
-        * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
+        * jsPrepend://{onesConfig.js} jsAppend://{onesConfig.js} includeFilter://resH:content-type=html
         
         \`\`\`tokenInfoRule.txt
         /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"com""
@@ -234,9 +230,7 @@ describe("Test getAllRules", () => {
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
 
-            if(api_branch) {
-              document.cookie = \`api_branch=\${api_branch};\`;
-            } 
+            document.cookie = \`api_branch=\${api_branch};\`;
 
           }catch(e){}
         
@@ -267,8 +261,9 @@ describe("Test getAllRules", () => {
         `
 
         \`\`\`langJson.json
-        {"language":{"value":"zh","maxAge":600000000,"path":"/","domain":""}}
+        {"language":{"value":"zh","maxAge":600000000,"expires": "3000-01-04T04:17:38.081Z","path":"/","domain":""}}
         \`\`\`
+
 
         \`\`\`lang.txt
         /"language":".+?"/ig: ""language":"zh""
@@ -285,24 +280,24 @@ describe("Test getAllRules", () => {
             document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
             
             // 设置当前cookie
-            const expireKV =  \`expires=600000000\` ;
-            const pathKV = \`path=/\`;
+            var expireKV =  \`expires='3000-01-04T04:17:38.081Z'\` ;
+            var pathKV = \`path=/\`;
             
             document.cookie = \`language=zh;\${expireKV};\${pathKV};\`;
             
         \`\`\`
         
-        * jsPrepend://{cookie.js} includeFilter://resH:content-type=html
+        * jsPrepend://{cookie.js} jsAppend://{cookie.js} includeFilter://resH:content-type=html
 
+       
         \`\`\`onesConfig.js 
             window.onesConfig = Object.assign(
+              ${JSON.stringify(CommonConfig)},
             (window.onesConfig||{}),
-            ${JSON.stringify(CommonConfig)},
             ${JSON.stringify(OnesConfigList.comp)}
             )
         \`\`\`
-        
-        * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
+        * jsPrepend://{onesConfig.js} jsAppend://{onesConfig.js} includeFilter://resH:content-type=html
         
         \`\`\`tokenInfoRule.txt
         /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"com""
@@ -324,9 +319,7 @@ describe("Test getAllRules", () => {
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
 
-            if(api_branch) {
-              document.cookie = \`api_branch=\${api_branch};\`;
-            } 
+            document.cookie = \`api_branch=\${api_branch};\`;
 
           }catch(e){}
         
@@ -366,7 +359,7 @@ describe("Test getAllRules", () => {
         `
 
         \`\`\`langJson.json
-        {"language":{"value":"zh","maxAge":600000000,"path":"/","domain":""}}
+        {"language":{"value":"zh","maxAge":600000000,"expires": "3000-01-04T04:17:38.081Z","path":"/","domain":""}}
         \`\`\`
 
         \`\`\`lang.txt
@@ -384,24 +377,24 @@ describe("Test getAllRules", () => {
             document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
             
             // 设置当前cookie
-            const expireKV =  \`expires=600000000\` ;
-            const pathKV = \`path=/\`;
+            var expireKV =  \`expires='3000-01-04T04:17:38.081Z'\` ;
+            var pathKV = \`path=/\`;
             
             document.cookie = \`language=zh;\${expireKV};\${pathKV};\`;
             
         \`\`\`
-        
-        * jsPrepend://{cookie.js} includeFilter://resH:content-type=html
+        * jsPrepend://{cookie.js} jsAppend://{cookie.js} includeFilter://resH:content-type=html
 
         \`\`\`onesConfig.js 
             window.onesConfig = Object.assign(
+              ${JSON.stringify(CommonConfig)},
             (window.onesConfig||{}),
-            ${JSON.stringify(CommonConfig)},
             ${JSON.stringify(OnesConfigList.comp)}
             )
         \`\`\`
         
-        * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
+        
+        * jsPrepend://{onesConfig.js} jsAppend://{onesConfig.js} includeFilter://resH:content-type=html
         
         \`\`\`tokenInfoRule.txt
         /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"com""
@@ -423,9 +416,8 @@ describe("Test getAllRules", () => {
             // 清除当前cookie
             document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
 
-            if(api_branch) {
-              document.cookie = \`api_branch=\${api_branch};\`;
-            } 
+            document.cookie = \`api_branch=\${api_branch};\`;
+
 
           }catch(e){}
         

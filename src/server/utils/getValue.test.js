@@ -196,7 +196,7 @@ describe("Test getCorrectUrlEntry", () => {
           url: "http://dev.myones.net/a/a/a"
         }
       })
-    ).toEqual("http://dev.myones.net");
+    ).toEqual("http://preview.myones.net/");
   });
 
   test("Test No Req Url", () => {
@@ -225,6 +225,34 @@ describe("Test getCorrectUrlEntry", () => {
         }
       })
     ).toEqual("http://preview.myones.net/");
+  });
+
+  test("Test Correct Req Url", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "http://preview.myones.net/",
+          host: ""
+        },
+        originalReq: {
+          url: "http://zh.dev.myones.net/a"
+        }
+      })
+    ).toEqual("http://zh.dev.myones.net");
+  });
+
+  test("Test Correct Referer", () => {
+    expect(
+      getCorrectUrlEntry({
+        headers: {
+          referer: "http://zh.dev.myones.net/",
+          host: ""
+        },
+        originalReq: {
+          url: "http://dev.myones.net/a"
+        }
+      })
+    ).toEqual("http://zh.dev.myones.net/");
   });
 });
 
