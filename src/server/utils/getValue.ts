@@ -72,16 +72,39 @@ export function getApiCurrentPath(url: string) {
 // 获取请求正确的来源地址（请求发生时的页面链接）
 export function getCorrectUrlEntry(req: WhistleBase.Request): string {
   const referer = req.headers.referer;
-  const host = req.headers.host;
   const originUrl = HOST_REG.exec(req?.originalReq?.url)?.[0];
 
   if (!URl_REG.test(referer)) {
     return originUrl;
   }
 
-  if (host && originUrl?.includes(host)) {
+  // 总的来说，我需要拿到标识
+  // 判断 referer 和 url 标识，有 标识优先取 url，url 没有取 referer
+  // 是否存在有一种情况，url 没有标识，但是 referer 又是上一个页面链接，这种情况暂时想不到
+  const refererEnvInfo = getEnvInfoFromUrl(referer);
+  const urlEnvInfo = getEnvInfoFromUrl(originUrl);
+
+  if (urlEnvInfo.env || urlEnvInfo.lang) {
     return originUrl;
   }
+
+  if (refererEnvInfo.env || refererEnvInfo.lang) {
+    return referer;
+  }
+
+  /**
+   * 调用接口跟当前链接不是同一个域名
+   * host: previewglobal-us.myones.net
+   * referer: https://en.comp.previewglobal.myones.net/
+   * url: https://previewglobal-us.myones.net/project/api/project/auth/token_info
+   */
+
+  /**
+   * 跳转环境之后，referer 是上一个页面，
+   * host: en.comp.previewglobal.myones.net
+   * referer https://previewglobal.myones.net/
+   * url: https://en.comp.previewglobal.myones.net/project/
+   */
 
   /**
    * referer 不一定表示当前访问页面链接，而是表示上一个页面的链接，所以这里不能全部使用referer
