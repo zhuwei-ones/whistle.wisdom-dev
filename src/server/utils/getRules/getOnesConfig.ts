@@ -10,13 +10,13 @@ export function getOnesConfigJsRules(config: Exclude<ConfigEnv, "">) {
   const onesConfigRule = `
     \`\`\`onesConfig.js 
       window.onesConfig = Object.assign(
-        (window.onesConfig||{}),
         ${commonOnesConfig},
+        (window.onesConfig||{}),
         ${onesConfigStr}
       )
     \`\`\`
     
-    * jsPrepend://{onesConfig.js} includeFilter://resH:content-type=html
+    * jsPrepend://{onesConfig.js} jsAppend://{onesConfig.js} includeFilter://resH:content-type=html
   `;
 
   return onesConfigRule;

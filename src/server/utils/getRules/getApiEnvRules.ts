@@ -18,9 +18,7 @@ export function getApiBranchConfigRules() {
         // 清除当前cookie
         document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
 
-        if(api_branch) {
-          document.cookie = \`api_branch=\${api_branch};\`;
-        } 
+        document.cookie = \`api_branch=\${api_branch};\`;
 
       }catch(e){}
     
@@ -44,13 +42,14 @@ export function getApiBranchEnvRules(req: IncomingMessage) {
     return ``;
   }
 
+  return ``;
+
   // x-ones-api-host: https://mars-dev.myones.net:16416/project/api/project/
 
   const ApiBranchRules = `
     \`\`\`branch.txt
     x-ones-api-branch-project:	/project/${apiBranch}/
     x-ones-api-branch-wiki:	/project/${apiBranch}/
-    x-ones-api-branch-stripe:	/project/${apiBranch}/
     \`\`\`
 
     /\\/\\/(.+?)\\..+\\/api\\//  reqHeaders://{branch.txt}

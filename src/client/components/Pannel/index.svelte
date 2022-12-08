@@ -43,7 +43,7 @@
     }.${getOriginalUrl(href)}`;
 
     const data = {
-      api_branch: apiBranch || "master",
+      api_branch: apiBranch,
       link,
     };
 
