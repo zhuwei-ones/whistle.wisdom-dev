@@ -33,14 +33,14 @@ export function setStorage(key: string, value: string) {
   if (!window.localStorage) {
     return;
   }
-  key = "vConsole_" + key;
+  key = "wisdom_" + key;
   localStorage.setItem(key, value);
 }
 export function getStorage(key: string) {
   if (!window.localStorage) {
     return;
   }
-  key = "vConsole_" + key;
+  key = "wisdom_" + key;
   return localStorage.getItem(key);
 }
 
