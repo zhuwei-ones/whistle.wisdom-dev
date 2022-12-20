@@ -1,18 +1,8 @@
 import { getApiBranchRules } from "./getApiEnvRules";
 import { getLangRules } from "./getLangRule";
 import { getOnesConfigRules } from "./getOnesConfig";
-import { getOtherRules } from "./getOtherRules";
-
-import {
-  getEnvUrlReg,
-  getEnvInfoFromUrl,
-  getCorrectUrlEntry
-} from "../getValue";
-
-//【获取规则】api 接口导去正确域名（过滤前面自定义添加的域名，比如 zh.com.xxx.xx)
-export function getApiToCurrectHostRules() {
-  return `/${getEnvUrlReg()}/ $1://$6`;
-}
+import { getEnvInfoFromUrl, getCorrectUrlEntry } from "../getValue";
+import { getApiCommonRules } from "./getApiCommonRules";
 
 // 统一获取所有规则入口
 export function getAllRule(req: WhistleBase.Request) {
@@ -30,8 +20,7 @@ export function getAllRule(req: WhistleBase.Request) {
     ${getLangRules(lang, req.headers.origin)}
     ${getOnesConfigRules(env)}
     ${getApiBranchRules(req)}
-    ${getApiToCurrectHostRules()} 
-    ${getOtherRules(req)}
+    ${getApiCommonRules(req)}
   `;
 
   console.log(
