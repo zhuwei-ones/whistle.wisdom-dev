@@ -26,12 +26,12 @@ export function getOnesConfigJsRules(config: Exclude<ConfigEnv, "">) {
 export function getOnesConfigApiRules(config: Exclude<ConfigEnv, "">) {
   const onesConfigVal = OnesConfigList[config];
   const tokenInfoRuleResult = `
-    \`\`\`tokenInfoRule.txt
+    \`\`\`tokenConfigInfo.txt
       /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"${onesConfigVal.operatingRegion}""
       /"ones:instance:serveMode":".+?"/ig: ""ones:instance:serveMode":"${onesConfigVal.serveMode}""
     \`\`\`
     
-    /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenInfoRule.txt} 
+    /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenConfigInfo.txt} 
   `;
 
   return tokenInfoRuleResult;

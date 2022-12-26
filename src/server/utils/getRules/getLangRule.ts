@@ -1,28 +1,31 @@
+import { EXPIRE_COOKIE_TIME, VALID_COOKIE_TIME } from "../../const";
 import { LangEnv } from "./../../types/env.d";
+
+const COOKIE_LANG_PATH = "/project";
 
 export function getLangApiRules(lang: LangEnv, referer: string) {
   const langJson = {
     language: {
       value: lang,
       maxAge: 600000000,
-      expires: `3000-01-04T04:17:38.081Z`,
-      path: "/",
+      expires: VALID_COOKIE_TIME,
+      path: COOKIE_LANG_PATH,
       domain: referer?.split("//")?.[1] || ""
     }
   };
 
   const apiRules = `
-      \`\`\`langJson.json
+      \`\`\`langCookie.json
       ${JSON.stringify(langJson)}
       \`\`\`
       
-      \`\`\`lang.txt
+      \`\`\`tokenLangInfo.txt
         /"language":".+?"/ig: ""language":"${lang}""
       \`\`\`
       
-      /\\/\\/(.+?)\\..+\\/api\\// reqCookies://{langJson.json} reqHeaders://accept-language=${lang}  resCookies://{langJson.json} 
+      /\\/\\/(.+?)\\..+\\/api\\// reqCookies://{langCookie.json} reqHeaders://accept-language=${lang} resCookies://{langCookie.json} 
       
-      /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{lang.txt}
+      /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenLangInfo.txt}
   `;
 
   return apiRules;
@@ -32,20 +35,20 @@ export function getLangJsRules(lang: LangEnv) {
   const langJson = {
     language: {
       value: lang,
-      maxAge: `3000-01-04T04:17:38.081Z`,
-      path: "/"
+      expires: VALID_COOKIE_TIME,
+      path: COOKIE_LANG_PATH
     }
   };
 
   return `
     \`\`\`cookie.js
+
+      // 设置当前cookie
+      var expireKV =  \`expires='${langJson.language.expires}'\` ;
+      var pathKV = \`path=${langJson.language.path}\`;
       
       // 清除当前cookie
-      document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
-      
-      // 设置当前cookie
-      var expireKV =  \`expires='${langJson.language.maxAge}'\` ;
-      var pathKV = \`path=${langJson.language.path}\`;
+      document.cookie = \`language=; expires='${EXPIRE_COOKIE_TIME}';\${pathKV};\`;
       
       document.cookie = \`language=${lang};\${expireKV};\${pathKV};\`;
       

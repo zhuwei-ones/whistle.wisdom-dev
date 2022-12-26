@@ -1,6 +1,6 @@
 import { IncomingMessage } from "http";
 import * as Cookie from "cookie";
-import { HOST_REG } from "../../const";
+import { EXPIRE_COOKIE_TIME, HOST_REG } from "../../const";
 
 // 注入一段js 脚本，设置当前页面的接口分支
 export function getApiBranchConfigRules() {
@@ -16,7 +16,7 @@ export function getApiBranchConfigRules() {
         api_branch = obj.api_branch ;
 
         // 清除当前cookie
-        document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
+        document.cookie = \`api_branch=; expires='${EXPIRE_COOKIE_TIME}';\`;
 
         document.cookie = \`api_branch=\${api_branch};\`;
 
