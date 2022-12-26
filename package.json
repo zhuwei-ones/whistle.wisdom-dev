@@ -13,7 +13,8 @@
     "dev:w2": "w2 stop & lack watch & w2 run",
     "dev:server": "tsc -w -p ./src/server/tsconfig.json",
     "dev:client-pack": "webpack --mode=development --watch --progress",
-    "dev:client-view": "webpack serve --config webpack.serve.config  --progress"
+    "dev:client-view": "webpack serve --config webpack.serve.config  --progress",
+    "prepublish": "npm run clean & npm run build"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
