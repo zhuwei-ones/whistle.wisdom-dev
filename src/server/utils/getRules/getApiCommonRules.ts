@@ -1,4 +1,3 @@
-import { IncomingMessage } from "http";
 import {
   getApiCurrentPath,
   getCorrectUrlEntry,
@@ -12,34 +11,56 @@ export function getApiToCurrectHostRules() {
 }
 
 //【获取规则】其他规则，比如解决跨域，referer
-export function getApiCorsRules(req: IncomingMessage) {
+export function getApiCorsRules(req: Whistle.PluginRequest) {
   const currentUrl = getCorrectUrlEntry(req);
   const { origin: allowOrigin } = parse(currentUrl); // 当前访问的页面的host，比如 ja.myones.net
   const correctHost = `${getApiCurrentPath(currentUrl)}`; // 原本的host ,比如 myones.net
 
+  const headers = req.originalReq.headers;
+  const allowHeaders = headers["access-control-request-headers"];
+  let allowHeaderRules = ``;
+
   console.log("correctHost", correctHost);
+  // console.log("currentUrl", currentUrl);
 
   if (!allowOrigin) {
     return ``;
   }
 
+  if (allowHeaders) {
+    allowHeaderRules = `
+    Access-Control-Allow-Headers: ${allowHeaders}
+    `;
+  }
+
+  /**
+   * 不使用 * 跨域的原因
+   * The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'
+   */
+
   return `
-      \`\`\`resHeader.txt
-      access-control-allow-origin: ${allowOrigin} 
+      \`\`\`accessResponseHeader.txt
+      access-control-allow-origin:  ${allowOrigin}
+      access-control-allow-credentials: true
+      Access-Control-Allow-Methods: GET, POST, PUT, PATCH, POST, DELETE, OPTIONS
+      ${allowHeaderRules}
       \`\`\`
       
-      \`\`\`reqHeader.txt
+      \`\`\`accessRequestHeader.txt
       origin: ${correctHost}
       referer: ${correctHost}/
       \`\`\`
       
-      * resHeaders://{resHeader.txt}  reqHeaders://{reqHeader.txt}
+      * resHeaders://{accessResponseHeader.txt}  reqHeaders://{accessRequestHeader.txt} statusCode://200
+
+      /\\/\\/(.+?)\\..+\\/api\\// includeFilter://m:options replaceStatus://200
+    
   `;
 }
 
-export function getApiCommonRules(req: IncomingMessage) {
+export function getApiCommonRules(req: WhistleBase.Request) {
   return `
   ${getApiToCurrectHostRules()}
-  ${getApiCorsRules(req)}
+  ${getApiCorsRules(req as Whistle.PluginRequest)}
 `;
 }
