@@ -47,3 +47,7 @@ export const URl_REG =
   /^((ht|f)tps?):\/\/[\w-]+(\.[\w-]+)+([\w\-.,@?^=%&:/~+#]*[\w\-@?^=%&/~+#])?$/;
 
 export const HOST_REG = /^https?:\/\/[\w-.]+(:\d+)?/i;
+
+export const EXPIRE_COOKIE_TIME = "Mon, 26 Jul 1997 05:00:00 GMT";
+
+export const VALID_COOKIE_TIME = "Mon, 26 Jul 3000 05:00:00 GMT";
