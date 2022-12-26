@@ -1,6 +1,6 @@
 {
   "name": "whistle.wisdom-dev",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ones Project 多语言多环境配置独立开发",
   "scripts": {
     "test": "jest",
