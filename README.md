@@ -55,6 +55,9 @@ npm run dev:client-view
 npm run release # 小版本
 npm run release -- --release-as 1.1.0 # 定制版本
 
+# 打包
+npm run build
+
 # 编译前端资源并开启预览
 npm login
 npm publish
