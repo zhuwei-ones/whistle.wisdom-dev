@@ -80,5 +80,8 @@
       "lcov",
       "json-summary"
     ]
-  }
+  },
+  "maintainers": [
+    "ones"
+  ]
 }
