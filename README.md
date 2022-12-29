@@ -58,7 +58,13 @@ npm run release -- --release-as 1.1.0 # 定制版本
 # 打包
 npm run build
 
-# 编译前端资源并开启预览
-npm login
-npm publish
+
+# 发布到私有源
+
+# 私有源信息参考：https://our.ones.pro/wiki/?from_wecom=1#/team/RDjYMhKq/space/H8a3Zh9m/page/PgNzT55o
+
+# 用私有源账号登录之后发布
+npm login --registry=https://npm2.myones.net/
+
+npm publish --registry=https://npm2.myones.net/
 ```
