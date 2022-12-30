@@ -18,7 +18,7 @@
 ## 安装
 
 ```sh
-w2 install whistle.wisdom-dev
+w2 install whistle.wisdom-dev --registry=https://npm2.myones.net/
 ```
 
 ## 开发
