@@ -17,10 +17,10 @@ export function getApiCorsRules(req: Whistle.PluginRequest) {
   const correctHost = `${getApiCurrentPath(currentUrl)}`; // 原本的host ,比如 myones.net
 
   const headers = req.originalReq.headers;
-  const allowHeaders = headers["access-control-request-headers"];
+  const allowHeaders = headers?.["access-control-request-headers"];
   let allowHeaderRules = ``;
 
-  console.log("correctHost", correctHost);
+  // console.log("correctHost", correctHost);
   // console.log("currentUrl", currentUrl);
 
   if (!allowOrigin) {
