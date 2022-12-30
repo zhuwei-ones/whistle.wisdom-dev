@@ -1,7 +1,9 @@
-import { EXPIRE_COOKIE_TIME, VALID_COOKIE_TIME } from "../../const";
+import {
+  COOKIE_LANG_PATH,
+  EXPIRE_COOKIE_TIME,
+  VALID_COOKIE_TIME
+} from "../../const";
 import { LangEnv } from "./../../types/env.d";
-
-const COOKIE_LANG_PATH = "/project";
 
 export function getLangApiRules(lang: LangEnv, referer: string) {
   const langJson = {
