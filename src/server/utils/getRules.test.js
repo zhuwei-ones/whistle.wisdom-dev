@@ -1,4 +1,10 @@
-const { CommonConfig, OnesConfigList } = require("../const");
+const {
+  CommonConfig,
+  OnesConfigList,
+  VALID_COOKIE_TIME,
+  COOKIE_LANG_PATH,
+  EXPIRE_COOKIE_TIME
+} = require("../const");
 const { getAllRule } = require("./getRules");
 
 const TEST_DATA = {
@@ -26,27 +32,28 @@ function removeUnusedChar(str) {
 
 function getLangRules(lang) {
   return `
-  \`\`\`langJson.json
-  {"language":{"value":"${lang}","maxAge":600000000,"expires": "3000-01-04T04:17:38.081Z","path":"/","domain":""}}
+  \`\`\`langCookie.json
+  {"language":{"value":"${lang}","maxAge":600000000,"expires": "${VALID_COOKIE_TIME}","path":"${COOKIE_LANG_PATH}","domain":""}}
   \`\`\`
 
-  \`\`\`lang.txt
+  \`\`\`tokenLangInfo.txt
   /"language":".+?"/ig: ""language":"${lang}""
   \`\`\`
   
-  /\\/\\/(.+?)\\..+\\/api\\// reqCookies://{langJson.json} reqHeaders://accept-language=${lang}  resCookies://{langJson.json} 
+  /\\/\\/(.+?)\\..+\\/api\\// reqCookies://{langCookie.json} reqHeaders://accept-language=${lang}  resCookies://{langCookie.json} 
   
-  /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{lang.txt}
+  /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenLangInfo.txt}
 
 
   \`\`\`cookie.js
+
+      // 设置当前cookie
+      var expireKV =  \`expires='${VALID_COOKIE_TIME}'\` ;
+      var pathKV = \`path=${COOKIE_LANG_PATH}\`;
+      
       
       // 清除当前cookie
-      document.cookie = \`language=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
-      
-      // 设置当前cookie
-      var expireKV =  \`expires='3000-01-04T04:17:38.081Z'\` ;
-      var pathKV = \`path=/\`;
+      document.cookie = \`language=; expires='${EXPIRE_COOKIE_TIME}';\${pathKV};\`;
       
       document.cookie = \`language=${lang};\${expireKV};\${pathKV};\`;
       
@@ -70,7 +77,7 @@ function getOnesConfigRules(env) {
 
     * jsPrepend://{onesConfig.js} jsAppend://{onesConfig.js} includeFilter://resH:content-type=html
 
-    \`\`\`tokenInfoRule.txt
+    \`\`\`tokenConfigInfo.txt
     /"ones:instance:operatingRegion":".+?"/ig: ""ones:instance:operatingRegion":"${
       info.operatingRegion
     }""
@@ -79,7 +86,7 @@ function getOnesConfigRules(env) {
     }""
     \`\`\`
 
-    /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenInfoRule.txt}
+    /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenConfigInfo.txt}
   
   `;
 }
@@ -132,16 +139,21 @@ function getApiRedirectRule() {
 
 function getApiCorsRule(currentOrigin) {
   return `
-    \`\`\`resHeader.txt
-    access-control-allow-origin: https://${currentOrigin}
+    \`\`\`accessResponseHeader.txt
+    access-control-allow-origin:  ${currentOrigin}
+    access-control-allow-credentials: true
+    Access-Control-Allow-Methods: GET, POST, PUT, PATCH, POST, DELETE, OPTIONS
     \`\`\`
+  
     
-    \`\`\`reqHeader.txt
+    \`\`\`accessRequestHeader.txt
     origin: https://dev.myones.net
     referer: https://dev.myones.net/
     \`\`\`
     
-    * resHeaders://{resHeader.txt}  reqHeaders://{reqHeader.txt}
+    * resHeaders://{accessResponseHeader.txt}  reqHeaders://{accessRequestHeader.txt} statusCode://200
+
+    /\\/\\/(.+?)\\..+\\/api\\// includeFilter://m:options replaceStatus://200
   
   `;
 }
@@ -191,7 +203,7 @@ describe("Test getAllRules", () => {
 
           ${getApiRedirectRule()}
 
-          ${getApiCorsRule(TEST_DATA.EN.HOST)}
+          ${getApiCorsRule(TEST_DATA.EN.URL)}
             
         `
       )
@@ -218,7 +230,7 @@ describe("Test getAllRules", () => {
           
           ${getApiRedirectRule()}
 
-          ${getApiCorsRule(TEST_DATA.COMP.HOST)}
+          ${getApiCorsRule(TEST_DATA.COMP.URL)}
         `
       )
     );
@@ -246,7 +258,7 @@ describe("Test getAllRules", () => {
           
           ${getApiRedirectRule()}
 
-          ${getApiCorsRule(TEST_DATA.ZH_COMP.HOST)}
+          ${getApiCorsRule(TEST_DATA.ZH_COMP.URL)}
 
         `
       )
@@ -278,7 +290,7 @@ describe("Test getAllRules", () => {
 
           ${getApiRedirectRule()}
 
-          ${getApiCorsRule(TEST_DATA.ZH_COMP.HOST)}
+          ${getApiCorsRule(TEST_DATA.ZH_COMP.URL)}
         
       `
       )
@@ -310,7 +322,7 @@ describe("Test getAllRules", () => {
           
           ${getApiRedirectRule()}
 
-          ${getApiCorsRule(TEST_DATA.ZH_COMP.HOST)}
+          ${getApiCorsRule(TEST_DATA.ZH_COMP.URL)}
 
         `
       )
