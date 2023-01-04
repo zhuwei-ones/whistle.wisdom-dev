@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "outDir": "../../dist/server",
     "noImplicitAny": true,
     "removeComments": true,
@@ -10,7 +11,11 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node"
   },
-  "include": [
-    "../server"
-  ]
+  "include": ["../server"],
+  "exclude": ["*/**/*.test.js"],
+  "baseUrl": ".",
+  "paths": {
+    "utils": ["src/server/utils/*"],
+    "const": ["src/server/const/*"]
+  }
 }

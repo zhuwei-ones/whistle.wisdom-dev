@@ -1,12 +1,24 @@
 <script lang="ts">
-  import { OperationOriginList, PanelConfigList } from "const";
+  import {
+    CloudTypeList,
+    FormKeys,
+    jumpOriginMap,
+    LanguageList,
+    OperationOriginList,
+    PanelConfigList,
+  } from "const/index";
+  import { getOriginalUrl } from "lib/index";
   import { onDestroy, onMount } from "svelte";
 
   import Style from "./index.less";
 
   export let show = false;
-  export let onJump;
-  // export let currentSetting;
+  export let selectList = {
+    [FormKeys.cloud]: CloudTypeList[0].value,
+    [FormKeys.origin]: OperationOriginList[0].value,
+    [FormKeys.lang]: LanguageList[0].value,
+  };
+  export let apiBranch = "";
 
   /*************************************
    * Lifecycle
@@ -21,7 +33,27 @@
   });
 
   const jumpLink = () => {
-    onJump();
+    const cloud = selectList[FormKeys.cloud];
+    const origin = selectList[FormKeys.origin];
+    const lang = selectList[FormKeys.lang];
+    const { protocol, href } = location;
+
+    const link = `${protocol}//${lang}.${
+      jumpOriginMap[cloud + "_" + origin]
+    }.${getOriginalUrl(href)}`;
+
+    const data = {
+      api_branch: apiBranch,
+      link,
+    };
+
+    window.open(link, JSON.stringify(data));
+
+    show = false;
+  };
+
+  const onClose = () => {
+    show = false;
   };
 </script>
 
@@ -29,11 +61,11 @@
   <div class="mdc-dialog mdc-dialog--open">
     <div class="mdc-dialog__container">
       <div class="mdc-dialog__surface">
-        <h2 class="mdc-dialog__title">新建一个Project独立开发环境</h2>
+        <h2 class="mdc-dialog__title">新建Project独立开发环境</h2>
         <div class="mdc-dialog__content">
           {#each PanelConfigList as config}
             <div class="form-row">
-              <span>{config.title}</span>
+              <span>{config.title}：</span>
 
               {#each config.options as opt}
                 <div class="mdc-form-field">
@@ -45,6 +77,7 @@
                       type="radio"
                       id={`radio-${opt.value}`}
                       value={opt.value}
+                      bind:group={selectList[config.key]}
                     />
                     <div class="mdc-radio__background">
                       <div class="mdc-radio__outer-circle" />
@@ -57,10 +90,25 @@
               {/each}
             </div>
           {/each}
+
+          <div class="form-row">
+            <span>API 指向：</span>
+            <div class="mdc-input">
+              <input type="text" placeholder="" bind:value={apiBranch} />
+            </div>
+          </div>
+
+          <p class="mdc-tip">
+            tip:
+            <br />
+            1、直接配置分支，比如 U0044
+            <br />
+            2、直接配置域名，比如 https://mars-dev.myones.net:16416
+          </p>
         </div>
         <button class="jump-btn" on:click={jumpLink}> 跳转 </button>
       </div>
     </div>
-    <div class="mdc-dialog__scrim" />
+    <div class="mdc-dialog__scrim" on:click={onClose} on:keypress={onClose} />
   </div>
 </div>

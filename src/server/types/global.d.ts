@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference, @typescript-eslint/naming-convention */
 
 /// <reference path="base.d.ts" />
+/// <reference path="env.d.ts" />
 
-declare module 'koa-onerror';
+declare module "koa-onerror";
 
 declare namespace Whistle {
   type Body = string | false;
@@ -37,8 +38,14 @@ declare namespace Whistle {
     del(key: K): void;
     reset(): void;
     prune(): void;
-    forEach<T = this>(callbackFn: (this: T, value: V, key: K, cache: this) => void, thisArg?: T): void;
-    rforEach<T = this>(callbackFn: (this: T, value: V, key: K, cache: this) => void, thisArg?: T): void;
+    forEach<T = this>(
+      callbackFn: (this: T, value: V, key: K, cache: this) => void,
+      thisArg?: T
+    ): void;
+    rforEach<T = this>(
+      callbackFn: (this: T, value: V, key: K, cache: this) => void,
+      thisArg?: T
+    ): void;
     keys(): K[];
     values(): V[];
     dump(): Array<LRUEntry<K, V>>;
@@ -49,7 +56,7 @@ declare namespace Whistle {
     reqId: string;
     frameId: string;
     base64?: string;
-    bin?: '' | Buffer;
+    bin?: "" | Buffer;
     text?: string;
     mask?: boolean;
     compressed?: boolean;
@@ -210,8 +217,8 @@ declare namespace Whistle {
     [propName: string]: any;
   }
 
-  type GetSession = (cb: (session: Session | '') => void) => void;
-  type GetFrame = (cb: (Frames: Frame[] | '') => void) => void;
+  type GetSession = (cb: (session: Session | "") => void) => void;
+  type GetFrame = (cb: (Frames: Frame[] | "") => void) => void;
   type SetRules = (rules: string) => boolean;
   type PassThrough = (uri?: any, trailers?: any) => void;
 
@@ -280,7 +287,7 @@ declare namespace Whistle {
       headers: any;
       isRexExp?: boolean;
       pattern?: string;
-      customParser?: boolean | '';
+      customParser?: boolean | "";
     };
     originalRes: {
       serverIp: string;
@@ -334,16 +341,30 @@ declare namespace Whistle {
     isSNI: boolean;
   }
 
-  type PluginSNIResult = boolean | {
-    key: string;
-    cert: string;
-    mtime?: number;
-  };
+  type PluginSNIResult =
+    | boolean
+    | {
+        key: string;
+        cert: string;
+        mtime?: number;
+      };
 
   type Result<T> = T | Promise<T>;
 
-  type PluginAuthHook = (req: PluginAuthRequest, options?: PluginOptions) => Result<boolean>;
-  type PluginSNIHook = (req: PluginSNIRequest, options?: PluginOptions) => Result<PluginSNIResult>;
-  type PluginHook = (server: PluginServer, options?: PluginOptions) => Result<void>;
-  type PluginUIHook = (server: PluginServer, options?: PluginOptions) => Result<void>;
+  type PluginAuthHook = (
+    req: PluginAuthRequest,
+    options?: PluginOptions
+  ) => Result<boolean>;
+  type PluginSNIHook = (
+    req: PluginSNIRequest,
+    options?: PluginOptions
+  ) => Result<PluginSNIResult>;
+  type PluginHook = (
+    server: PluginServer,
+    options?: PluginOptions
+  ) => Result<void>;
+  type PluginUIHook = (
+    server: PluginServer,
+    options?: PluginOptions
+  ) => Result<void>;
 }

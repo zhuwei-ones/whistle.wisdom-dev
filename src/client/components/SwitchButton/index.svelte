@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { getValueFromConfigInfo } from "lib/getValue";
+  import { getEnvInfoFormConfig } from "lib/index";
   import { onMount, onDestroy } from "svelte";
-  import * as tool from "../../lib/tool";
+  import * as tool from "lib/tool";
   import Style from "./index.less";
 
   /*************************************
@@ -10,7 +10,7 @@
 
   export let position = { x: 0, y: 0 };
   export let onClick;
-  export let currentSetting;
+  let btnText = "正在读取环境信息...";
 
   /*************************************
    * Inner properties
@@ -44,6 +44,10 @@
 
   onMount(() => {
     Style.use();
+
+    setTimeout(() => {
+      btnText = getEnvInfoFormConfig();
+    }, 2000);
   });
 
   onDestroy(() => {
@@ -154,7 +158,7 @@
   };
 </script>
 
-<div
+<button
   class="ws-switch"
   style="right: {btnSwitchPos.x}px; bottom: {btnSwitchPos.y}px; "
   bind:this={btnSwitch}
@@ -162,7 +166,6 @@
   on:mousemove={onMove}
   on:mouseleave={onEnd}
   on:mouseup={onMouseUp}
-  on:keypress
 >
-  {getValueFromConfigInfo(currentSetting)}
-</div>
+  {btnText}
+</button>

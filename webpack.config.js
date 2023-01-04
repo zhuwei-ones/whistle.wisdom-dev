@@ -1,6 +1,5 @@
 const Webpack = require("webpack");
 const Path = require("path");
-const { execSync } = require("child_process");
 const sveltePreprocess = require("svelte-preprocess");
 const pkg = require("./package.json");
 
@@ -9,8 +8,8 @@ module.exports = (_, argv) => {
 
   const plugins = [
     new Webpack.DefinePlugin({
-      __VERSION__: JSON.stringify(pkg.version),
-    }),
+      __VERSION__: JSON.stringify(pkg.version)
+    })
   ];
 
   if (isDev) {
@@ -20,7 +19,7 @@ module.exports = (_, argv) => {
           //   execSync("npm run build:typings");
           console.log("ok");
         });
-      },
+      }
     });
   }
 
@@ -28,7 +27,7 @@ module.exports = (_, argv) => {
     mode: argv.mode,
     devtool: false,
     entry: {
-      index: Path.resolve(__dirname, "./src/client/index.ts"),
+      index: Path.resolve(__dirname, "./src/client/index.ts")
     },
     target: ["web", "es5"],
     output: {
@@ -38,9 +37,9 @@ module.exports = (_, argv) => {
         name: "wisdom-dev",
         type: "umd",
         umdNamedDefine: true,
-        export: "default",
+        export: "default"
       },
-      globalObject: "this || self",
+      globalObject: "this || self"
     },
     resolve: {
       extensions: [".css", ".ts", ".js", ".html", ".less", ".mjs", ".svelte"],
@@ -48,31 +47,31 @@ module.exports = (_, argv) => {
         svelte: Path.resolve("node_modules", "svelte"),
         const: Path.resolve("src/client/const"),
         lib: Path.resolve("src/client/lib"),
-        components: Path.resolve("src/client/components"),
+        components: Path.resolve("src/client/components")
       },
-      mainFields: ["svelte", "browser", "module", "main"],
+      mainFields: ["svelte", "browser", "module", "main"]
     },
     module: {
       rules: [
         {
           test: /\.(js|ts)$/,
-          use: [{ loader: "babel-loader" }],
+          use: [{ loader: "babel-loader" }]
         },
         {
           test: /\.(less|css)$/i,
           use: [
             {
               loader: "style-loader",
-              options: { injectType: "lazyStyleTag" },
+              options: { injectType: "lazyStyleTag" }
             },
             { loader: "css-loader" },
             {
               loader: "less-loader",
               options: {
-                lessOptions: { math: "always" },
-              },
-            },
-          ],
+                lessOptions: { math: "always" }
+              }
+            }
+          ]
         },
         {
           test: /\.(svelte)$/,
@@ -82,38 +81,38 @@ module.exports = (_, argv) => {
               loader: "svelte-loader",
               options: {
                 preprocess: sveltePreprocess({
-                  sourceMap: isDev,
+                  sourceMap: isDev
                 }),
                 compilerOptions: {
                   dev: isDev,
-                  accessors: true,
+                  accessors: true
                 },
                 emitCss: true,
-                hotReload: false,
-              },
-            },
-          ],
+                hotReload: false
+              }
+            }
+          ]
         },
         {
           // required to prevent errors from Svelte on Webpack 5+, omit on Webpack 4
           test: /node_modules[\\/]svelte[\\/].*\.m?js$/,
           resolve: {
-            fullySpecified: false,
+            fullySpecified: false
           },
-          use: ["babel-loader"],
-        },
-      ],
+          use: ["babel-loader"]
+        }
+      ]
     },
     stats: {
       colors: true,
-      errorDetails: true,
+      errorDetails: true
     },
     optimization: {
-      minimize: !isDev,
+      minimize: !isDev
     },
     watchOptions: {
-      ignored: ["**/node_modules"],
+      ignored: ["**/node_modules"]
     },
-    plugins,
+    plugins
   };
 };

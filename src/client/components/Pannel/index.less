@@ -1,33 +1,61 @@
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 
-
-.form-row{
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .mdc-form-field{
-        min-width: 100px;
-    }
+  .mdc-form-field {
+    min-width: 100px;
+  }
 }
 
-.ws-panel{
+.ws-panel {
+  font-size: 18px;
+
+  .jump-btn {
+    height: 46px;
+    line-height: 46px;
+    border-radius: 2px;
+    background-color: rgba(0, 100, 255, 0.7);
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    border: none;
+    margin: 15px;
     font-size: 18px;
 
-    .jump-btn{
-        height: 46px;
-        line-height: 46px;
-        border-radius: 2px;
-        background-color: rgba(0, 100, 255,0.7);
-        cursor: pointer;
-        color: rgb(255, 255, 255);
-        border: none;
-        margin: 15px ;
-        font-size: 18px;
-
-        &:hover{
-            background-color: rgba(0, 100, 255,1);
-        }
+    &:hover {
+      background-color: rgba(0, 100, 255, 1);
     }
+  }
+
+  .mdc-input {
+    position: relative;
+    box-sizing: border-box;
+    margin-left: 10px;
+    height: 48px;
+    input {
+      border: 1px solid rgba(0, 0, 0, 0.38);
+      border-radius: 4px;
+      position: absolute;
+      width: 350px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      outline: none;
+      padding: 0 16px;
+      caret-color: rgba(0, 100, 255, 1);
+      font-size: 20px;
+      color: rgba(0, 0, 0, 0.7);
+
+      &:focus {
+        border-color: rgba(0, 100, 255, 1);
+      }
+    }
+  }
 }
 
-
+.mdc-tip {
+  color: rgba(0, 0, 0, 0.7);
+  margin-top: 5px;
+  font-size: 18px;
+}

@@ -12,11 +12,12 @@
     "strict": false,
     "baseUrl": ".",
     "paths": {
-      "const": ["src/client/const"],
+      "const": ["src/client/const/*"],
       "components": ["src/client/components/*"],
       "lib": ["src/client/lib/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": [ "node_modules/*"]
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "include": ["../client"],
+  "exclude": ["node_modules/*"]
 }
