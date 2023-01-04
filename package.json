@@ -5,7 +5,9 @@
   "scripts": {
     "test": "jest",
     "clean": "rimraf dist",
-    "release": "standard-version",
+    "release": "standard-version --release-as patch",
+    "release-minor": "standard-version --release-as minor",
+    "release-major": "standard-version --release-as major",
     "build": "npm run clean & run-p build:*",
     "build:client": "webpack --mode=production --progress ",
     "build:server": "tsc  -p ./src/server/tsconfig.json",
@@ -13,7 +15,7 @@
     "dev:w2": "w2 stop & lack watch & w2 run",
     "dev:server": "tsc -w -p ./src/server/tsconfig.json",
     "dev:client-pack": "webpack --mode=development --watch --progress",
-    "dev:client-view": "webpack serve --config webpack.serve.config  --progress",
+    "dev:client-view": "npm run dev:client-pack & webpack serve --config webpack.serve.config  --progress",
     "prepublish": "npm run test & npm run clean & npm run build"
   },
   "devDependencies": {
@@ -83,5 +85,9 @@
   },
   "maintainers": [
     "ones"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm2.myones.net/",
+    "access": "public"
+  }
 }
