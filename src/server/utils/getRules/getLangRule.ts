@@ -3,16 +3,18 @@ import {
   EXPIRE_COOKIE_TIME,
   VALID_COOKIE_TIME
 } from "../../const";
+import { getOriginalHostname } from "../getValue";
 import { LangEnv } from "./../../types/env.d";
 
 export function getLangApiRules(lang: LangEnv, referer: string) {
+  // const currentDomain = referer?.split("//")?.[1];
   const langJson = {
     language: {
       value: lang,
-      maxAge: 600000000,
-      expires: VALID_COOKIE_TIME,
+      // maxAge: 600000000,
+      // expires: VALID_COOKIE_TIME,
       path: COOKIE_LANG_PATH,
-      domain: referer?.split("//")?.[1] || ""
+      domain: `.${getOriginalHostname(referer)}` //currentDomain ? `.${currentDomain}` : ""
     }
   };
 
@@ -52,7 +54,7 @@ export function getLangJsRules(lang: LangEnv) {
       // 清除当前cookie
       document.cookie = \`language=; expires='${EXPIRE_COOKIE_TIME}';\${pathKV};\`;
       
-      document.cookie = \`language=${lang};\${expireKV};\${pathKV};\`;
+      document.cookie = \`language=${lang};\${pathKV};\`;
       
     \`\`\`
     

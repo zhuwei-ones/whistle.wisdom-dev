@@ -72,3 +72,10 @@ export function setCookie(
 
   document.cookie = `${k}=${v}${expireKV};${pathKV};${domainKV}`;
 }
+
+export function clearCookie(k: string, domain?: string, path?: string) {
+  const OVER_TIME = "Mon, 26 Jul 1997 05:00:00 GMT";
+  document.cookie = `${k}=; expires=${OVER_TIME}; path=${path || "/"}; ${
+    domain ? `domain=${domain};` : ""
+  }`;
+}

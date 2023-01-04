@@ -1,6 +1,8 @@
 import { SvelteComponent } from "svelte";
 import CoreCompClass from "components/Core/index.svelte";
 import { DOM_ID } from "const/index";
+import { clearCookie } from "lib/index";
+import { getOriginalHostname } from "../server/utils/getValue";
 
 class WisdomDev {
   public version: string = __VERSION__;
@@ -20,6 +22,7 @@ class WisdomDev {
     if (document !== undefined) {
       if (document.readyState === "loading") {
         window.addEventListener("DOMContentLoaded", _onload);
+        this.unload();
       } else {
         _onload();
       }
@@ -35,6 +38,16 @@ class WisdomDev {
     }
     this.compInstance = new CoreCompClass({
       target: document.documentElement
+    });
+  }
+
+  private unload() {
+    window.addEventListener("beforeunload", () => {
+      clearCookie(
+        "language",
+        `.${getOriginalHostname(window.location.origin)}`,
+        "/project"
+      );
     });
   }
 }

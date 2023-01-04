@@ -20,7 +20,9 @@ export function getApiBranchConfigRules() {
 
         document.cookie = \`api_branch=\${api_branch};\`;
 
-      }catch(e){}
+      }catch(e){
+        console.log("api 指向失败",e)
+      }
     
     \`\`\`
     
