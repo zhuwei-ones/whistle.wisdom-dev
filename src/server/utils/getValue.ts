@@ -1,3 +1,4 @@
+import { IncomingMessage } from "http";
 import { ConfigList, HOST_REG, URl_REG } from "../const";
 import { LanguageList } from "../const";
 import { ConfigEnv, LangEnv } from "../types/env";
@@ -111,4 +112,13 @@ export function getCorrectUrlEntry(req: WhistleBase.Request): string {
    */
 
   return referer;
+}
+
+export function getCorrectEnvBranchName(req: IncomingMessage) {
+  const currentUrl = getCorrectUrlEntry(req);
+  const { lang, env } = getEnvInfoFromUrl(currentUrl);
+
+  const branchName = `${lang}_${env}_api_branch`;
+
+  return branchName;
 }
