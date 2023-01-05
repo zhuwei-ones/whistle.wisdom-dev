@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.3...v1.0.4) (2023-01-05)
+
+
+### Features
+
+* 关闭多环境开发时清除language cookie 不影响原来的功能 ([e88c71d](https://github.com/zhuwei-ones/whistle.wisdom-dev/commit/e88c71de221fe5d6ee354ed64a504410aeca1bf3))
+
+
+### Bug Fixes
+
+* **server:** 获取语言标识不能只通过origin，应该通过函数处理过的url ([6e89283](https://github.com/zhuwei-ones/whistle.wisdom-dev/commit/6e89283fafefa05d9eccfe360e05480a3500cec8))
+* **server:** 接口 Response Header 只覆盖原cookie language，不做有效cookie 设置，以 前端脚本设置的为主 ([1b1b40d](https://github.com/zhuwei-ones/whistle.wisdom-dev/commit/1b1b40dde00e243ca3b47044ff1cf125f1d686c7))
+* **server:** api_branch cookie 因为属于子域名，接口是父域名，所以携带不上，现在把 api_branch 设置为父域名，并且加上环境标识字段来区分不同环境的 接口指向 ([66c92e3](https://github.com/zhuwei-ones/whistle.wisdom-dev/commit/66c92e3f0d2340c3241fae7b50d0f951e6b6f2e2))
+
 ### [1.0.3](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.2...v1.0.3) (2022-12-30)
 
 ### [1.0.2](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.1...v1.0.2) (2022-12-26)
