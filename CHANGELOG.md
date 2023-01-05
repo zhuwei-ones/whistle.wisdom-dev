@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5-alpha.0](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.4...v1.0.5-alpha.0) (2023-01-05)
+
 ### [1.0.4](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.3...v1.0.4) (2023-01-05)
 
 
