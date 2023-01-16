@@ -6,6 +6,7 @@ const {
   EXPIRE_COOKIE_TIME
 } = require("../const");
 const { getAllRule } = require("./getRules");
+const { getEnvInfoFromUrl } = require("./getValue");
 
 const TEST_DATA = {
   ORIGINAL: {
@@ -33,7 +34,7 @@ function removeUnusedChar(str) {
 function getLangRules(lang) {
   return `
   \`\`\`langCookie.json
-  {"language":{"value":"${lang}","maxAge":600000000,"expires": "${VALID_COOKIE_TIME}","path":"${COOKIE_LANG_PATH}","domain":""}}
+  {"language":{"value":"${lang}","maxAge":0,"path":"/","domain":".dev.myones.net"}}
   \`\`\`
 
   \`\`\`tokenLangInfo.txt
@@ -55,7 +56,7 @@ function getLangRules(lang) {
       // 清除当前cookie
       document.cookie = \`language=; expires='${EXPIRE_COOKIE_TIME}';\${pathKV};\`;
       
-      document.cookie = \`language=${lang};\${expireKV};\${pathKV};\`;
+      document.cookie = \`language=${lang};\${pathKV};\`;
       
   \`\`\`
   
@@ -91,7 +92,11 @@ function getOnesConfigRules(env) {
   `;
 }
 
-function getBranchScriptRules(api_branch) {
+function getBranchScriptRules(hostname = "") {
+  let { lang, env } = getEnvInfoFromUrl(hostname);
+
+  const branchName = `${lang}_${env}_api_branch`;
+
   return `
       \`\`\`apiBranch.js 
 
@@ -103,12 +108,16 @@ function getBranchScriptRules(api_branch) {
 
         api_branch = obj.api_branch ;
 
+        var domain = \`domain=.dev.myones.net\`;
+
         // 清除当前cookie
-        document.cookie = \`api_branch=; expires='Mon, 26 Jul 1997 05:00:00 GMT';\`;
+        document.cookie = \`${branchName}=; expires='${EXPIRE_COOKIE_TIME}';\`;
 
-        document.cookie = \`api_branch=\${api_branch};\`;
+        document.cookie = \`${branchName}=\${api_branch}; \${domain}\`;
 
-      }catch(e){}
+      }catch(e){
+        console.log("api 指向失败",e)
+      }
 
     \`\`\`
 
@@ -132,8 +141,7 @@ function getBranchApiRules(api_branch) {
 
 function getApiRedirectRule() {
   return `
-
-  /(https?):\\/\\/((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)/ $1://$6
+    /(https?):\\/\\/((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)/ $1://$6
   `;
 }
 
@@ -199,7 +207,7 @@ describe("Test getAllRules", () => {
         `
           ${getLangRules("en")}
 
-          ${getBranchScriptRules()}
+          ${getBranchScriptRules(TEST_DATA.EN.URL)}
 
           ${getApiRedirectRule()}
 
@@ -226,7 +234,7 @@ describe("Test getAllRules", () => {
         `
           ${getOnesConfigRules("comp")}
 
-          ${getBranchScriptRules()}
+          ${getBranchScriptRules(TEST_DATA.COMP.URL)}
           
           ${getApiRedirectRule()}
 
@@ -254,7 +262,7 @@ describe("Test getAllRules", () => {
 
           ${getOnesConfigRules("comp")}
 
-          ${getBranchScriptRules()}
+          ${getBranchScriptRules(TEST_DATA.ZH_COMP.URL)}
           
           ${getApiRedirectRule()}
 
@@ -270,7 +278,7 @@ describe("Test getAllRules", () => {
       headers: {
         referer: "",
         host: TEST_DATA.ZH_COMP.HOST,
-        cookie: "api_branch=master"
+        cookie: "zh_comp_api_branch=master"
       },
       originalReq: {
         url: TEST_DATA.ZH_COMP.URL
@@ -284,7 +292,7 @@ describe("Test getAllRules", () => {
 
           ${getOnesConfigRules("comp")}
         
-          ${getBranchScriptRules()}
+          ${getBranchScriptRules(TEST_DATA.ZH_COMP.URL)}
 
           ${getBranchApiRules("master")}
 
@@ -302,7 +310,7 @@ describe("Test getAllRules", () => {
       headers: {
         referer: "",
         host: TEST_DATA.ZH_COMP.HOST,
-        cookie: "api_branch=master;"
+        cookie: "zh_comp_api_branch=master;"
       },
       originalReq: {
         url: TEST_DATA.ZH_COMP.URL
@@ -316,7 +324,7 @@ describe("Test getAllRules", () => {
 
           ${getOnesConfigRules("comp")}
 
-          ${getBranchScriptRules()}
+          ${getBranchScriptRules(TEST_DATA.ZH_COMP.URL)}
 
           ${getBranchApiRules("master")}
           

@@ -3,16 +3,26 @@ import {
   EXPIRE_COOKIE_TIME,
   VALID_COOKIE_TIME
 } from "../../const";
+import { getOriginalHostname } from "../getValue";
 import { LangEnv } from "./../../types/env.d";
 
 export function getLangApiRules(lang: LangEnv, referer: string) {
+  // const currentDomain = referer?.split("//")?.[1];
+
+  /**
+   * 接口 Response Header 只覆盖原cookie language，不做有效cookie 设置，以 前端脚本设置的为主
+   * 因为接口调用的域名没有环境标识，比如是dev.myones.net
+   * 所以无法设置 子域名的 cookie，只能设置 .dev.myones.net ，导致多个环境可能会相互影响
+   * 所以语言标识不应该在这里设置，以前端设置的脚本为主
+   * 前端设置 cookie 的 domain 是 具体的domain 下的，比如 ja.comp.dev.myones.net，不会相互影响
+   */
   const langJson = {
     language: {
       value: lang,
-      maxAge: 600000000,
-      expires: VALID_COOKIE_TIME,
-      path: COOKIE_LANG_PATH,
-      domain: referer?.split("//")?.[1] || ""
+      maxAge: 0,
+      // expires: EXPIRE_COOKIE_TIME,
+      path: "/",
+      domain: `.${getOriginalHostname(referer)}` //currentDomain ? `.${currentDomain}` : ""
     }
   };
 
@@ -52,7 +62,7 @@ export function getLangJsRules(lang: LangEnv) {
       // 清除当前cookie
       document.cookie = \`language=; expires='${EXPIRE_COOKIE_TIME}';\${pathKV};\`;
       
-      document.cookie = \`language=${lang};\${expireKV};\${pathKV};\`;
+      document.cookie = \`language=${lang};\${pathKV};\`;
       
     \`\`\`
     

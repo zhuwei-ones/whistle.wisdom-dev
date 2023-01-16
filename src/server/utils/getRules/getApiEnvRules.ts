@@ -1,9 +1,25 @@
 import { IncomingMessage } from "http";
 import * as Cookie from "cookie";
+import parse = require("url-parse");
 import { EXPIRE_COOKIE_TIME, HOST_REG } from "../../const";
+import {
+  getCorrectEnvBranchName,
+  getCorrectUrlEntry,
+  getOriginalHostname
+} from "../getValue";
 
 // 注入一段js 脚本，设置当前页面的接口分支
-export function getApiBranchConfigRules() {
+export function getApiBranchConfigRules(req: IncomingMessage) {
+  const currentUrl = getCorrectUrlEntry(req);
+  const { origin: allowOrigin } = parse(currentUrl); // 当前访问的页面的host，比如 ja.myones.net
+  const domain = `.${getOriginalHostname(allowOrigin)}`;
+
+  /**
+   * api_branch cookie 因为属于子域名，接口是父域名，所以携带不上
+   * 现在把 api_branch 设置为父域名，并且加上环境标识字段来区分不同环境的 接口指向
+   */
+  const branchName = getCorrectEnvBranchName(req);
+
   const onesConfigRule = `
     \`\`\`apiBranch.js 
 
@@ -11,16 +27,20 @@ export function getApiBranchConfigRules() {
       let api_branch = ''
 
       try{
-        const obj = JSON.parse(data) ||{};
+        const obj = JSON.parse(data) || {};
 
         api_branch = obj.api_branch ;
 
+        var domain = \`domain=${domain}\`;
+
         // 清除当前cookie
-        document.cookie = \`api_branch=; expires='${EXPIRE_COOKIE_TIME}';\`;
+        document.cookie = \`${branchName}=; expires='${EXPIRE_COOKIE_TIME}';\`;
 
-        document.cookie = \`api_branch=\${api_branch};\`;
+        document.cookie = \`${branchName}=\${api_branch}; \${domain} \`;
 
-      }catch(e){}
+      }catch(e){
+        console.log("api 指向失败",e)
+      }
     
     \`\`\`
     
@@ -32,10 +52,10 @@ export function getApiBranchConfigRules() {
 
 export function getApiBranchEnvRules(req: IncomingMessage) {
   const cookies = req.headers.cookie;
-
   const cookiesObj = Cookie.parse(cookies || "");
 
-  const apiBranch = cookiesObj.api_branch;
+  const branchName = getCorrectEnvBranchName(req);
+  const apiBranch = cookiesObj[branchName];
   const isBranch = !HOST_REG.test(apiBranch);
 
   if (!apiBranch) {
@@ -67,7 +87,7 @@ export function getApiBranchEnvRules(req: IncomingMessage) {
 
 export function getApiBranchRules(req: IncomingMessage) {
   return `
-    ${getApiBranchConfigRules()}
+    ${getApiBranchConfigRules(req)}
     ${getApiBranchEnvRules(req)}
   `;
 }

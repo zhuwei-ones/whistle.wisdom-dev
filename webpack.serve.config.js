@@ -12,20 +12,19 @@ module.exports = (env, argv) => {
     // devtool: 'eval-source-map',
     devtool: false,
     devServer: {
-      host: "0.0.0.0",
       port: 9191,
-      open: "dist/client/index.html",
+      open: "src/client/index.html",
       allowedHosts: "all",
       historyApiFallback: true,
       client: {
-        overlay: true,
+        overlay: true
       },
       static: [{ directory: contentBase }],
       onBeforeSetupMiddleware(devServer) {
         devServer.app.all("*", (req, res) => {
           const contentType = {
             flv: "video/x-flv",
-            wav: "audio/x-wav",
+            wav: "audio/x-wav"
           };
           const fileType = req.path.split(".").pop();
           // console.log('Req:::', fileType, req.path, req.query);
@@ -34,7 +33,7 @@ module.exports = (env, argv) => {
               "Content-Type": contentType[fileType],
               // 'Content-Type', 'application/octet-stream',
               "Transfer-Encoding": "chunked",
-              Connection: "keep-alive",
+              Connection: "keep-alive"
             });
             let n = 0;
             const write = () => {
@@ -61,7 +60,7 @@ module.exports = (env, argv) => {
                 if (req.query.chunked) {
                   res.set({
                     "Transfer-Encoding": "chunked",
-                    Connection: "keep-alive",
+                    Connection: "keep-alive"
                   });
                   res.write(fs.readFileSync(filePath));
                 } else {
@@ -76,11 +75,11 @@ module.exports = (env, argv) => {
             }, delay);
           }
         });
-      },
+      }
     },
     optimization: {
-      minimize: false,
+      minimize: false
     },
-    plugins: [new webpack.HotModuleReplacementPlugin()],
+    plugins: [new webpack.HotModuleReplacementPlugin()]
   });
 };

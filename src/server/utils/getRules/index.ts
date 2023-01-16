@@ -17,7 +17,7 @@ export function getAllRule(req: WhistleBase.Request) {
   }
 
   const resultRole = `
-    ${getLangRules(lang, req.headers.origin)}
+    ${getLangRules(lang, currentUrl)}
     ${getOnesConfigRules(env)}
     ${getApiBranchRules(req)}
     ${getApiCommonRules(req)}
