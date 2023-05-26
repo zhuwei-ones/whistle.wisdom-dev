@@ -8,7 +8,8 @@ export const PageAllowHost = [
   "ones.cn",
   "localhost",
   "127.0.0.1",
-  "our.ones.pro"
+  "our.ones.pro",
+  "dev-ones.site"
 ];
 
 export const OnesConfigList = {
