@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.5-alpha.0...v1.1.0) (2023-05-23)
+
+
+### Features
+
+* 支持新dev 环境域名 ([aaf82f6](https://github.com/zhuwei-ones/whistle.wisdom-dev/commit/aaf82f656db83a8234cff6af26105b6df8d2de93))
+
 ### [1.0.5-alpha.0](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.4...v1.0.5-alpha.0) (2023-01-05)
 
 ### [1.0.4](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.3...v1.0.4) (2023-01-05)
