@@ -3,7 +3,8 @@ const {
   getOriginalHostname,
   getApiCurrentPath,
   getCorrectUrlEntry,
-  getEnvUrlReg
+  getEnvUrlReg,
+  getCorrectTimezone
 } = require("./getValue");
 
 describe("Test getEnvInfoFromUrl", () => {
@@ -12,7 +13,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: ""
+      env: "",
+      timezone: ""
     });
   });
   test("Test Empty Url", () => {
@@ -20,7 +22,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: ""
+      env: "",
+      timezone: ""
     });
   });
 
@@ -29,7 +32,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: ""
+      env: "",
+      timezone: ""
     });
   });
 
@@ -38,7 +42,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: ""
+      env: "",
+      timezone: ""
     });
   });
 
@@ -47,7 +52,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "en",
-      env: ""
+      env: "",
+      timezone: ""
     });
   });
 
@@ -56,7 +62,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "",
-      env: "com"
+      env: "com",
+      timezone: ""
     });
   });
 
@@ -65,7 +72,8 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "en",
-      env: "com"
+      env: "com",
+      timezone: ""
     });
   });
 
@@ -74,7 +82,20 @@ describe("Test getEnvInfoFromUrl", () => {
 
     expect(result).toEqual({
       lang: "en",
-      env: "com"
+      env: "com",
+      timezone: ""
+    });
+  });
+
+  test("Test Timezone Url", () => {
+    const result = getEnvInfoFromUrl(
+      "http://america__los_angeles.en.com.dev.myones.net"
+    );
+
+    expect(result).toEqual({
+      lang: "en",
+      env: "com",
+      timezone: "America/Los_Angeles"
     });
   });
 });
@@ -259,7 +280,18 @@ describe("Test getCorrectUrlEntry", () => {
 describe("Test getEnvHostnameReg", () => {
   test("Test No Referer", () => {
     expect(getEnvUrlReg()).toEqual(
-      "(https?):\\/\\/((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)"
+      "(https?):\\/\\/((\\w+?__\\w+?)\\.)?((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)"
+    );
+  });
+});
+
+describe("Test getCorrectTimezone", () => {
+  test("Test No timezone", () => {
+    expect(getCorrectTimezone()).toEqual("");
+  });
+  test("Test timezone", () => {
+    expect(getCorrectTimezone("america__los_angeles")).toEqual(
+      "America/Los_Angeles"
     );
   });
 });

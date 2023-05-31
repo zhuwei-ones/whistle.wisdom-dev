@@ -24,6 +24,14 @@ const TEST_DATA = {
   ZH_COMP: {
     HOST: "zh.comp.dev.myones.net",
     URL: "https://zh.comp.dev.myones.net"
+  },
+  TIMEZONE_EN_COM: {
+    HOST: "america__los_angeles.en.com.dev.myones.net",
+    URL: "https://america__los_angeles.en.com.dev.myones.net"
+  },
+  TIMEZONE_ZH_COMP: {
+    HOST: "america__los_angeles.zh.comp.dev.myones.net",
+    URL: "https://america__los_angeles.zh.comp.dev.myones.net"
   }
 };
 
@@ -141,7 +149,7 @@ function getBranchApiRules(api_branch) {
 
 function getApiRedirectRule() {
   return `
-    /(https?):\\/\\/((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)/ $1://$6
+    /(https?):\\/\\/((\\w+?__\\w+?)\\.)?((zh|ja|en)\\.)?((cn|com|cnp|comp)\\.)?(.+)/ $1://$8
   `;
 }
 
@@ -163,6 +171,40 @@ function getApiCorsRule(currentOrigin) {
 
     /\\/\\/(.+?)\\..+\\/api\\// includeFilter://m:options replaceStatus://200
   
+  `;
+}
+
+function getTimezoneRules(timezone) {
+  return `
+
+  \`\`\`timezoneCookie.json
+  {"timezone":{"value":"${timezone}","maxAge":0,"path":"/","domain":".dev.myones.net"}}
+  \`\`\`
+  
+  \`\`\`tokenTimezoneInfo.txt
+    /"timezone":".+?"/ig: ""timezone":"${timezone}""
+  \`\`\`
+  
+  /\\/\\/(.+?)\\..+\\/api\\// reqCookies://{timezoneCookie.json} resCookies://{timezoneCookie.json} 
+  
+  /\\/\\/(.+?)\\.(.+)\\/token_info/  resReplace://{tokenTimezoneInfo.txt}
+
+  \`\`\`cookie.js
+   
+    // 设置当前cookie
+    var expireKV =  \`expires='${VALID_COOKIE_TIME}'\` ;
+    var pathKV = \`path=${COOKIE_LANG_PATH}\`;
+    
+    
+    // 清除当前cookie
+    document.cookie = \`timezone=; expires='${EXPIRE_COOKIE_TIME}';\${pathKV};\`;
+    
+    document.cookie = \`timezone=${timezone};\${pathKV};\`;
+    
+  \`\`\`
+
+  * jsPrepend://{cookie.js} jsAppend://{cookie.js} includeFilter://resH:content-type=html 
+
   `;
 }
 
@@ -305,15 +347,49 @@ describe("Test getAllRules", () => {
     );
   });
 
+  test("Test Timezone & Env & Lang Rule Rule", () => {
+    const result = getAllRule({
+      headers: {
+        referer: "",
+        host: TEST_DATA.TIMEZONE_EN_COM.HOST
+      },
+      originalReq: {
+        url: TEST_DATA.TIMEZONE_EN_COM.URL
+      }
+    });
+
+    expect(removeUnusedChar(result)).toEqual(
+      removeUnusedChar(
+        `
+          ${getLangRules("en")}
+
+          ${getOnesConfigRules("com")}
+
+          ${getBranchScriptRules(TEST_DATA.TIMEZONE_EN_COM.URL)}
+          
+          ${getApiRedirectRule()}
+
+          ${getApiCorsRule(TEST_DATA.TIMEZONE_EN_COM.URL)}
+
+          ${getTimezoneRules(
+            "America/Los_Angeles",
+            TEST_DATA.TIMEZONE_EN_COM.URL
+          )}
+
+        `
+      )
+    );
+  });
+
   test("Test All Rule", () => {
     const result = getAllRule({
       headers: {
         referer: "",
-        host: TEST_DATA.ZH_COMP.HOST,
+        host: TEST_DATA.TIMEZONE_ZH_COMP.HOST,
         cookie: "zh_comp_api_branch=master;"
       },
       originalReq: {
-        url: TEST_DATA.ZH_COMP.URL
+        url: TEST_DATA.TIMEZONE_ZH_COMP.URL
       }
     });
 
@@ -324,13 +400,18 @@ describe("Test getAllRules", () => {
 
           ${getOnesConfigRules("comp")}
 
-          ${getBranchScriptRules(TEST_DATA.ZH_COMP.URL)}
+          ${getBranchScriptRules(TEST_DATA.TIMEZONE_ZH_COMP.URL)}
 
           ${getBranchApiRules("master")}
           
           ${getApiRedirectRule()}
 
-          ${getApiCorsRule(TEST_DATA.ZH_COMP.URL)}
+          ${getApiCorsRule(TEST_DATA.TIMEZONE_ZH_COMP.URL)}
+
+          ${getTimezoneRules(
+            "America/Los_Angeles",
+            TEST_DATA.TIMEZONE_EN_COM.URL
+          )}
 
         `
       )
