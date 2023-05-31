@@ -7,7 +7,9 @@ import parse = require("url-parse");
 
 //【获取规则】api 接口导去正确域名（过滤前面自定义添加的域名，比如 zh.com.xxx.xx)
 export function getApiToCurrectHostRules() {
-  return `/${getEnvUrlReg()}/ $1://$6`;
+  return `/${getEnvUrlReg()}/ $${getEnvUrlReg.protocolIndex}://$${
+    getEnvUrlReg.originUrlIndex
+  }`;
 }
 
 //【获取规则】其他规则，比如解决跨域，referer
@@ -29,7 +31,7 @@ export function getApiCorsRules(req: Whistle.PluginRequest) {
 
   if (allowHeaders) {
     allowHeaderRules = `
-    Access-Control-Allow-Headers: ${allowHeaders}
+      Access-Control-Allow-Headers: ${allowHeaders}
     `;
   }
 

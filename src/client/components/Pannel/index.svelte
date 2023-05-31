@@ -11,6 +11,7 @@
   import { onDestroy, onMount } from "svelte";
 
   import Style from "./index.less";
+  import { TIMEZONE_LIST } from "const/timezone";
 
   export let show = false;
   export let selectList = {
@@ -19,6 +20,9 @@
     [FormKeys.lang]: LanguageList[0].value,
   };
   export let apiBranch = "";
+  export let currentTimezone = "";
+
+  export let timezoneList = TIMEZONE_LIST;
 
   /*************************************
    * Lifecycle
@@ -32,16 +36,25 @@
     Style.unuse();
   });
 
-  const jumpLink = () => {
+  const getCurrentLink = () => {
     const cloud = selectList[FormKeys.cloud];
     const origin = selectList[FormKeys.origin];
     const lang = selectList[FormKeys.lang];
     const { protocol, href } = location;
 
-    const link = `${protocol}//${lang}.${
-      jumpOriginMap[cloud + "_" + origin]
-    }.${getOriginalUrl(href)}`;
+    const lang_origin = `${lang}.${jumpOriginMap[cloud + "_" + origin]}`;
 
+    let link = `${lang_origin}.${getOriginalUrl(href)}`;
+
+    if (currentTimezone) {
+      link = `${currentTimezone.replace("/", "__")}.${link}`;
+    }
+
+    return `${protocol}//${link}`;
+  };
+
+  const jumpLink = () => {
+    const link = getCurrentLink();
     const data = {
       api_branch: apiBranch,
       link,
@@ -66,7 +79,6 @@
           {#each PanelConfigList as config}
             <div class="form-row">
               <span>{config.title}：</span>
-
               {#each config.options as opt}
                 <div class="mdc-form-field">
                   <div
@@ -92,6 +104,18 @@
           {/each}
 
           <div class="form-row">
+            <span>选择时区：</span>
+            <div class="mdc-input">
+              <select bind:value={currentTimezone}>
+                {#each timezoneList as tz}
+                  <option value={tz.tz}>{tz.tz_name}</option>
+                {/each}
+              </select>
+            </div>
+          </div>
+          <p class="form-extra-tip">可以不选择时区</p>
+
+          <div class="form-row">
             <span>API 指向：</span>
             <div class="mdc-input">
               <input type="text" placeholder="" bind:value={apiBranch} />
@@ -104,6 +128,11 @@
             1、直接配置分支，比如 U0044
             <br />
             2、直接配置域名，比如 https://mars-dev.myones.net:16416
+            <br />
+            <a
+              href="https://our.ones.pro/wiki/#/team/RDjYMhKq/space/H8a3Zh9m/page/YCEY6gf4"
+              target="_blank">详细帮助文档</a
+            >
           </p>
         </div>
         <button class="jump-btn" on:click={jumpLink}> 跳转 </button>

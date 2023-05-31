@@ -74,11 +74,12 @@ export function getEnvInfoFormConfig() {
 }
 
 export function getOriginalUrl(url: string) {
-  const result = /(https?):\/\/((zh|ja|en)\.)?((cn|com|cnp|comp)\.)?(.+)/.exec(
-    url
-  );
+  const result =
+    /(https?):\/\/((\w+_\w+)\.)?((zh|ja|en)\.)?((cn|com|cnp|comp)\.)?(.+)/.exec(
+      url
+    );
 
-  const originUrl = result?.[6] || "-";
+  const originUrl = result?.[8] || "-";
 
   return originUrl;
 }

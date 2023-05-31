@@ -40,7 +40,8 @@ export const LanguageList = [
 export const FormKeys = {
   origin: "origin",
   cloud: "cloud",
-  lang: "lang"
+  lang: "lang",
+  timezone: "timezone"
 };
 
 export const DataKeys = {

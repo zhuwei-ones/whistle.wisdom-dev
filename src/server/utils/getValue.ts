@@ -5,7 +5,14 @@ import { ConfigEnv, LangEnv } from "../types/env";
 
 // regExp 使用exec 会有缓存，每次执行都会在上一次执行结果基础上
 export const getEnvHostnameReg = () => {
-  return `((${LanguageList.join("|")})\\.)?((${ConfigList.join("|")})\\.)?(.+)`;
+  const langStr = LanguageList.join("|");
+  const configStr = ConfigList.join("|");
+
+  const langReg = `((${langStr})\\.)?`;
+  const configReg = `((${configStr})\\.)?`;
+  const timezoneReg = `((\\w+?__\\w+?)\\.)?`;
+
+  return `${timezoneReg}${langReg}${configReg}(.+)`;
 };
 
 // 获取匹配拼接了 env+config的域名的正则
@@ -13,32 +20,73 @@ export function getEnvUrlReg() {
   return `(https?):\\/\\/${getEnvHostnameReg()}`;
 }
 
+getEnvUrlReg.protocolIndex = 1;
+getEnvUrlReg.timezoneIndex = 3;
+getEnvUrlReg.langIndex = 5;
+getEnvUrlReg.envIndex = 7;
+getEnvUrlReg.originUrlIndex = 8;
+
 export function getUrlMatchResult(hostname: string) {
   const result = new RegExp(`://${getEnvHostnameReg()}$`, "g").exec(hostname);
 
   return result;
+}
+getUrlMatchResult.timezoneIndex = 2;
+getUrlMatchResult.langIndex = 4;
+getUrlMatchResult.envIndex = 6;
+getUrlMatchResult.originUrlIndex = 7;
+
+export function getCorrectTimezone(timezone: string) {
+  if (!timezone) {
+    return "";
+  }
+  return timezone
+    .replace(/_([a-zA-Z])/g, function (_, p1) {
+      return `_${p1?.toUpperCase()}`;
+    })
+    .replace(/[a-zA-Z]/, function (match) {
+      return match?.toUpperCase();
+    })
+    .replace("__", "/");
+}
+
+export function getUrlSplitInfo(hostname: string) {
+  const result = getUrlMatchResult(hostname);
+  let timezone = result?.[getUrlMatchResult.timezoneIndex];
+  const lang = result?.[getUrlMatchResult.langIndex] as LangEnv;
+  const env = result?.[getUrlMatchResult.envIndex] as ConfigEnv;
+
+  if (timezone) {
+    timezone = getCorrectTimezone(timezone);
+  }
+
+  return {
+    lang: lang && LanguageList.includes(lang) ? lang : "",
+    env: env && ConfigList.includes(env) ? env : "",
+    timezone: timezone ? timezone : "",
+    originUrl: result?.[getUrlMatchResult.originUrlIndex] || ""
+  };
 }
 
 // 从 请求中 获取到 配置的环境信息（语言/地域/公有私有）
 export function getEnvInfoFromUrl(hostname: string): {
   lang: LangEnv;
   env: ConfigEnv;
+  timezone: string;
 } {
   if (!hostname) {
     return {
       lang: "",
-      env: ""
+      env: "",
+      timezone: ""
     };
   }
 
-  const result = getUrlMatchResult(hostname);
-
-  const lang = result?.[2] as LangEnv;
-  const env = result?.[4] as ConfigEnv;
-
+  const result = getUrlSplitInfo(hostname);
   return {
-    lang: lang && LanguageList.includes(lang) ? lang : "",
-    env: env && ConfigList.includes(env) ? env : ""
+    lang: result.lang as LangEnv,
+    env: result.env as ConfigEnv,
+    timezone: result.timezone
   };
 }
 
@@ -50,7 +98,7 @@ export function getOriginalHostname(hostname: string) {
 
   const result = getUrlMatchResult(hostname);
 
-  return result?.[5] || "";
+  return result?.[getUrlMatchResult.originUrlIndex] || "";
 }
 
 // 获取 api 接口原本的路径（过滤前面自定义添加的域名，比如 zh.com.xxx.xx/a/a，变成 xxx.xx/a/a)
@@ -67,7 +115,9 @@ export function getApiCurrentPath(url: string) {
     return "";
   }
 
-  return `${result[1]}://${result[6]}`;
+  return `${result[getEnvUrlReg.protocolIndex]}://${
+    result[getEnvUrlReg.originUrlIndex]
+  }`;
 }
 
 // 获取请求正确的来源地址（请求发生时的页面链接）

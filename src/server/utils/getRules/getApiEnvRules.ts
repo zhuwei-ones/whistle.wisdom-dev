@@ -79,7 +79,7 @@ export function getApiBranchEnvRules(req: IncomingMessage) {
     x-ones-api-host:	${apiBranch}/project/api/project/
     \`\`\`
 
-    /\\/\\/(.+?)\\..+\\/api\\//  reqHeaders://{branch.txt}/project/api/project/
+    /\\/\\/(.+?)\\..+\\/api\\//  reqHeaders://{branch.txt}
   `;
 
   return isBranch ? ApiBranchRules : ApiHostRules;

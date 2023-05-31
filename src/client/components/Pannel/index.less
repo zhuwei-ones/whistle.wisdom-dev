@@ -32,7 +32,8 @@
     box-sizing: border-box;
     margin-left: 10px;
     height: 48px;
-    input {
+    input,
+    select {
       border: 1px solid rgba(0, 0, 0, 0.38);
       border-radius: 4px;
       position: absolute;
@@ -51,6 +52,9 @@
         border-color: rgba(0, 100, 255, 1);
       }
     }
+    select {
+      font-size: 14px;
+    }
   }
 }
 
@@ -58,4 +62,12 @@
   color: rgba(0, 0, 0, 0.7);
   margin-top: 5px;
   font-size: 18px;
+}
+
+.form-extra-tip {
+  margin-left: 105px;
+  font-size: 14px;
+  color: #aaa;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
