@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.1.0...v1.2.0) (2023-05-31)
+
+
+### Features
+
+* 支持时区独立配置 ([6351b05](https://github.com/zhuwei-ones/whistle.wisdom-dev/commit/6351b05cde31d98b8656e9c613e2922ddf788f00))
+
 ## [1.1.0](https://github.com/zhuwei-ones/whistle.wisdom-dev/compare/v1.0.5-alpha.0...v1.1.0) (2023-05-23)
 
 
