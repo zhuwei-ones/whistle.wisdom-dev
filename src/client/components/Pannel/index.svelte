@@ -121,6 +121,7 @@
               <input type="text" placeholder="" bind:value={apiBranch} />
             </div>
           </div>
+          <p class="form-extra-tip">可以不填API指向</p>
 
           <p class="mdc-tip">
             tip:
